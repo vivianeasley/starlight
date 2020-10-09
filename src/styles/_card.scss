@@ -1,0 +1,39 @@
+.card-wrapper {
+    width: 175px;
+    height: 230px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 6px;
+    border: 1px solid white;
+    position: relative;
+}
+
+.card-wrapper.flipped {
+    transition: transform 200ms ease-in-out;
+    transform: rotate(180deg);
+    margin: 10px 1px 10px 1px;
+}
+
+.card-wrapper.selected {
+    border: 2px solid white
+}
+
+.card-wrapper.flipped:hover {
+    transform: rotate(0)
+}
+
+.card-image {
+    margin: 10px;
+    max-width: 155px;
+    max-height: 210px;
+}
+
+.card-image-top-wrapper {
+    width: 175px;
+    height: 230px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 6px;
+    border: 1px solid white;
+    position: absolute;
+    top: 3px;
+    left: 4px;
+}

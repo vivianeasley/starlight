@@ -1,0 +1,53 @@
+.track-area-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.track-position-count {
+    text-align: center;
+}
+
+.track-card-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    margin: 40px 1px 10px 1px;
+}
+
+.track-card-placement-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    margin: 1px;
+}
+
+.track-card-placement-zone {
+    min-width: 175px;
+    min-height: 230px;
+    border: 1px solid grey;
+    white-space: normal;
+    text-align: center;
+}
+
+.view-area-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 5px;
+    margin: 5px;
+    background-color: blue;
+    border-radius: 4px;
+    text-align: center;
+    min-height: 200px;
+}
+
+.deck-area-wrapper {
+    position: relative;
+    width: 100px;
+    height: 150px;
+}
+
+.deck-card-wrapper {
+    position: absolute;
+    top: 0;
+    border: 1px solid red;
+}

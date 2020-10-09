@@ -1,0 +1,62 @@
+@import '_reset.scss';
+@import '_card-area.scss';
+@import '_card.scss';
+
+$var: white;
+
+body {
+  background-color: $var;
+  font-family: 'Expletus Sans', cursive;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+.control-area-wrapper {
+  // border-top: 1px solid gray;
+  // border-bottom: 1px solid gray;
+  margin: 4px;
+}
+
+.control-area-wrapper.disabled {
+  pointer-events: none;
+  opacity:0.3;
+  font-size: 12px;
+  margin: 0;
+}
+
+
+.control-area {
+  border: 1px solid gray;
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.control-area.selected {
+  background-color: green;
+}
+
+.control-area:hover {
+  background-color: #f1f1f1;
+  border-color: grey;
+}
+
+.control-area-title {
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  background-color: #f1f1f1
+}
+
+//////
+
+.directions-wrapper {
+  border-bottom: 1px solid grey;
+  padding: 4px;
+}
