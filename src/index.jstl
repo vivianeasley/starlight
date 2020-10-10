@@ -1,3 +1,15 @@
 <div class="directions-wrapper">Play a card or play a card with either a shield or damage</div>
 
 <main></main>
+
+<div>
+    <label for="your-id">Your id</label>
+    <input type="text" name="your-id" id="your-id" class="your-id">
+    <button class="your-id-button">Submit</button>
+</div>
+
+<div>
+    <label for="opponent-id">Opponent id</label>
+    <input type="text" name="opponent-id" id="opponent-id" class="opponent-id">
+    <button class="opponent-id-button">Submit</button>
+</div>

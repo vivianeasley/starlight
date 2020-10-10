@@ -28,7 +28,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Expletus+Sans:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles/index.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.7.2/simplepeer.min.js"></script>
   <script>
     var global = global || window;
     var Buffer = Buffer || [];
