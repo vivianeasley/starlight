@@ -12,4 +12,15 @@ export const uiData = {
     trackResolving: false,
     startingPlayer: true,
     eventsDisabled: false,
+
+    // matchmaking
+    gameID: undefined,
+    userID: undefined,
+    allOffers: [],
+    yourId: undefined,
+    yourName: undefined,
+    listings: [],
+    peerObj: undefined,
+    connection: undefined,
+    opponentInfo: undefined
 };
