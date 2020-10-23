@@ -12,7 +12,7 @@
     "styles:dev": "node-sass src/styles/ --output dist/styles/ --source-map true --source-map-contents true && postcss ./dist/styles/*.css --replace",
     "scripts:prod": "esbuild --bundle src/scripts/*.*s --outdir=dist/scripts --minify",
     "scripts:dev": "esbuild --bundle src/scripts/*.*s --outdir=dist/scripts --minify --sourcemap",
-    "serve": "node server.js",
+    "serve": "light-server -c .lightserverrc",
     "dev": "npm-run-all clean styles:dev scripts:dev eleventy:default --parallel eleventy:watch serve --print-label",
     "dev:debug": "DEBUG=* npm run dev",
     "seo:prod": "node site-utils/init-utils.js",

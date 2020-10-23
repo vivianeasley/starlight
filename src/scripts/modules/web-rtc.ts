@@ -1,7 +1,10 @@
 import { updateState } from "./state-management/immer-state"
 
+let signalState = "stable";
+
 const host = location.origin.replace(/^http/, 'ws')
-const ws = new WebSocket(host+"/connect")
+const hostPort = host.replace("8080", '3000')
+const ws = new WebSocket(hostPort+"/connect")
 let SIGNAL_ID = makeid(8);
 let USER_ID = makeid(8);
 let configuration = {
@@ -27,11 +30,14 @@ let dataChannel;
 
 ws.onmessage = (msg) => {
   const response = JSON.parse(msg.data);
+  console.log("user "+ USER_ID, response)
 
   if (response && response.type) {
     if (response.type === "MATCH") initMatch(response);
     if (response.type === "SDP") setUpConn(response);
     if (response.type === "ICE") setUpConn(response);
+
+
 
     return;
   }
@@ -50,6 +56,7 @@ export const initiateGame = function initiateGame () {
 }
 
 export const joinGame = function joinGame (gameID:string) {
+
   SIGNAL_ID = gameID;
   const initialRequestStr = JSON.stringify({"type":"JOIN", "gameID":gameID, "userID":USER_ID, "userName":"anonymous"})
   ws.send(initialRequestStr);
@@ -96,48 +103,67 @@ function initMatch (data:any) {
 // negotiate ice
 
 
-// localConnection.createOffer()
-// .then(offer => localConnection.setLocalDescription(offer))
-// .then(() => remoteConnection.setRemoteDescription(localConnection.localDescription))
-// .then(() => remoteConnection.createAnswer())
-// .then(answer => remoteConnection.setLocalDescription(answer))
-// .then(() => localConnection.setRemoteDescription(remoteConnection.localDescription))
-// .catch(handleCreateDescriptionError);
+// async function connectTo () {
+//   await rtcPeerConn.createOffer().then(offer => rtcPeerConn.setLocalDescription(offer))
+//   .then(() => remoteConnection.setRemoteDescription(localConnection.localDescription))
+//   .then(() => remoteConnection.createAnswer())
+//   .then(answer => remoteConnection.setLocalDescription(answer))
+//   .then(() => localConnection.setRemoteDescription(remoteConnection.localDescription))
+//   .catch(handleCreateDescriptionError);
+// }
 
 
 
-export const setUpConn = function setUpConn (data:any) {
+
+
+let count = 0;
+export const setUpConn = async function setUpConn (data:any) {
 
     if (data.type !== "MATCH") {
-        if (data.message.sdp) {
+        if (data.message.sdp && signalState !== "stable") {
+          console.log("should only be called 1 time", data)
           rtcPeerConn.setRemoteDescription(new RTCSessionDescription(data.message.sdp)).then(function() {
               // Only create answers in response to offers
               if(data.message.sdp.type === 'offer') {
                   console.log("Sending answer");
-                  rtcPeerConn.createAnswer().then(sendLocalDesc).catch(logError);
+                  rtcPeerConn.createAnswer().then(sendLocalDesc).catch((e)=>{console.log(e)});
               }
-          }).catch(logError);
-        }
-        else {
-          const messageCan = JSON.parse(data.message);
-          if (!messageCan.candidate) return;
-          rtcPeerConn.addIceCandidate(new RTCIceCandidate(messageCan.candidate)).catch(logError);
+          }).catch((e)=>{console.log(e)});
+        } else {
+          // if (count === 1) return;
+          // console.log("When called +++++ ", signalState)
+            let messageCan
+            if (typeof data.message === "string") {
+              messageCan = JSON.parse(data.message);
+            } else {
+              messageCan = data.message;
+            }
+            console.log("When called +++++ ", messageCan)
+            if (!messageCan.candidate) return;
+            rtcPeerConn.addIceCandidate(new RTCIceCandidate(messageCan.candidate)).then(count++).catch((e)=>{console.log(e)});
+
+
         }
     }
-
 }
 
-function startSignaling() {
+async function startSignaling() {
     displaySignalMessage("starting signaling...");
     rtcPeerConn = new RTCPeerConnection(configuration);
     dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
 
     dataChannel.onopen = dataChannelStateChanged;
     rtcPeerConn.ondatachannel = receiveDataChannel;
-    let iceSignal;
+
     // send any ice candidates to the other peer
 
+    rtcPeerConn.addEventListener("signalingstatechange", ev => {
+      signalState = rtcPeerConn.signalingState;
+      console.log(rtcPeerConn.signalingState)
+    }, false);
+
     rtcPeerConn.onicecandidate = function (evt) {
+        let iceSignal;
         if (evt.candidate) {
           // console.log("------", evt)
           iceSignal = JSON.stringify({"type":"ICE", "message": JSON.stringify({ 'candidate': evt.candidate }), "gameID":SIGNAL_ID, "userID":USER_ID})
@@ -149,19 +175,19 @@ function startSignaling() {
 
     rtcPeerConn.onnegotiationneeded = function () {
         displaySignalMessage("on negotiation called");
-        rtcPeerConn.createOffer().then(sendLocalDesc).catch(logError);
+        rtcPeerConn.createOffer().then(sendLocalDesc).catch((e)=>{console.log(e)});
 
     }
 }
 
 function sendLocalDesc(description) {
   console.log('Got description', description);
-  let sdpSignal;
   rtcPeerConn.setLocalDescription(description).then(function() {
+    let sdpSignal;
     let desc = { 'sdp': description };
     sdpSignal = JSON.stringify({"type":"SDP", "message": desc, "gameID":SIGNAL_ID, "userID":USER_ID});
     ws.send(sdpSignal);
-  }).catch(logError);
+  }).catch((e)=>{console.log(e)});
 }
 
 // function sendLocalDesc(desc) {
@@ -170,7 +196,7 @@ function sendLocalDesc(description) {
 //         displaySignalMessage("sending local description");
 //         sdpSignal = JSON.stringify({"type":"SDP", "message": JSON.stringify({ 'sdp': rtcPeerConn.localDescription }), "gameID":SIGNAL_ID, "userID":USER_ID});
 //         ws.send(sdpSignal);
-//     }, logError);
+//     }, (e)=>{console.log(e)});
 // }
 
 //Data Channel Specific methods
@@ -194,9 +220,6 @@ function receiveDataChannelMessage(event) {
 }
 
 //Logging/Display Methods
-function logError(error) {
-    displaySignalMessage(error);
-}
 
 function displayMessage(message) {
     console.log(message)
