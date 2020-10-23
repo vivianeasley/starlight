@@ -1,6 +1,10 @@
 import { updateState } from "./state-management/immer-state"
 
-let signalState = "stable";
+///// BEGIN WEBRTC & SOCKET CONFIG /////
+
+let ignoreOffer = false;
+let makingOffer = false;
+let polite = true;
 
 const host = location.origin.replace(/^http/, 'ws')
 const hostPort = host.replace("8080", '3000')
@@ -15,37 +19,36 @@ let configuration = {
   ]
 };
 
-
-// {
-//   'iceServers': [{
-//       'urls': 'stun:stun.l.google.com:19302'
-//   }]
-// };
-// let isNegotiating = false;
 let rtcPeerConn;
 let dataChannelOptions = {
   maxRetransmitTime: 1000, //milliseconds
 };
 let dataChannel;
 
+///// END WEBRTC & SOCKET CONFIG /////
+
 ws.onmessage = (msg) => {
   const response = JSON.parse(msg.data);
-  console.log("user "+ USER_ID, response)
 
   if (response && response.type) {
     if (response.type === "MATCH") initMatch(response);
-    if (response.type === "SDP") setUpConn(response);
-    if (response.type === "ICE") setUpConn(response);
+    return;
+  }
 
+  if (response && response.description) {
+    setUpConn(response.description, undefined);
+    return;
+  }
 
-
+  if (response && response.candidate) {
+    setUpConn(undefined, response.candidate);
     return;
   }
   updateGamesList(response);
 
+}
 
-} // if you get "INIT" call setUpConn({type: "BUILD"}) else setUpConn(msg.data)
-
+///////// END MATCH MAKING METHODS //////////
 
 export const initiateGame = function initiateGame () {
   const initialRequestStr = JSON.stringify({"type":"LIST", "gameID":SIGNAL_ID, "userID":USER_ID, "userName":"anonymous"})
@@ -56,7 +59,7 @@ export const initiateGame = function initiateGame () {
 }
 
 export const joinGame = function joinGame (gameID:string) {
-
+  polite = false;
   SIGNAL_ID = gameID;
   const initialRequestStr = JSON.stringify({"type":"JOIN", "gameID":gameID, "userID":USER_ID, "userName":"anonymous"})
   ws.send(initialRequestStr);
@@ -76,6 +79,10 @@ function updateGamesList (data:any) {
   });
 }
 
+///////// END MATCH MAKING METHODS //////////
+
+///////// BEGIN WEBRTC CONNECTION //////////
+
 function initMatch (data:any) {
   updateState((state:any)=>{
     state.uiData.opponentInfo = data;
@@ -84,150 +91,112 @@ function initMatch (data:any) {
   if (!rtcPeerConn) startSignaling();
 }
 
-//Page controls
-// var chatArea = document.querySelector("#chatArea");
-// var signalingArea = document.querySelector("#signalingArea");
-
-//Signaling Code Setup
-
-// io = io.connect();
-// ws.send({"signal_ID": SIGNAL_ID});
-
-//Send a first signaling message to anyone listening
-//In other apps this would be on a button click, we are just doing it on page load
-
-// ws.onmessage = (data) => {setUpConn(data)}
 
 
+export const setUpConn = async (description, candidate) => {
 
-// negotiate ice
+  try {
+    if (description) {
+      const offerCollision = (description.type === "offer") &&
+                             (makingOffer || rtcPeerConn.signalingState !== "stable");
 
+      ignoreOffer = !polite && offerCollision;
+      if (ignoreOffer) {
+        return;
+      }
 
-// async function connectTo () {
-//   await rtcPeerConn.createOffer().then(offer => rtcPeerConn.setLocalDescription(offer))
-//   .then(() => remoteConnection.setRemoteDescription(localConnection.localDescription))
-//   .then(() => remoteConnection.createAnswer())
-//   .then(answer => remoteConnection.setLocalDescription(answer))
-//   .then(() => localConnection.setRemoteDescription(remoteConnection.localDescription))
-//   .catch(handleCreateDescriptionError);
-// }
+      await rtcPeerConn.setRemoteDescription(description);
 
-
-
-
-
-let count = 0;
-export const setUpConn = async function setUpConn (data:any) {
-
-    if (data.type !== "MATCH") {
-        if (data.message.sdp && signalState !== "stable") {
-          console.log("should only be called 1 time", data)
-          rtcPeerConn.setRemoteDescription(new RTCSessionDescription(data.message.sdp)).then(function() {
-              // Only create answers in response to offers
-              if(data.message.sdp.type === 'offer') {
-                  console.log("Sending answer");
-                  rtcPeerConn.createAnswer().then(sendLocalDesc).catch((e)=>{console.log(e)});
-              }
-          }).catch((e)=>{console.log(e)});
-        } else {
-          // if (count === 1) return;
-          // console.log("When called +++++ ", signalState)
-            let messageCan
-            if (typeof data.message === "string") {
-              messageCan = JSON.parse(data.message);
-            } else {
-              messageCan = data.message;
-            }
-            console.log("When called +++++ ", messageCan)
-            if (!messageCan.candidate) return;
-            rtcPeerConn.addIceCandidate(new RTCIceCandidate(messageCan.candidate)).then(count++).catch((e)=>{console.log(e)});
-
-
+      if (description.type === "offer") {
+        await rtcPeerConn.setLocalDescription();
+        let iceSignal = JSON.stringify({ description: rtcPeerConn.localDescription, "gameID":SIGNAL_ID, "userID":USER_ID });
+        ws.send(iceSignal);
+      }
+    } else if (candidate) {
+      try {
+        await rtcPeerConn.addIceCandidate(candidate);
+      } catch(err) {
+        if (!ignoreOffer) {
+          throw err;
         }
+      }
     }
+  } catch(err) {
+    console.error(err);
+  }
 }
 
 async function startSignaling() {
-    displaySignalMessage("starting signaling...");
     rtcPeerConn = new RTCPeerConnection(configuration);
     dataChannel = rtcPeerConn.createDataChannel('textMessages', dataChannelOptions);
 
     dataChannel.onopen = dataChannelStateChanged;
     rtcPeerConn.ondatachannel = receiveDataChannel;
 
-    // send any ice candidates to the other peer
-
-    rtcPeerConn.addEventListener("signalingstatechange", ev => {
-      signalState = rtcPeerConn.signalingState;
-      console.log(rtcPeerConn.signalingState)
-    }, false);
-
-    rtcPeerConn.onicecandidate = function (evt) {
-        let iceSignal;
-        if (evt.candidate) {
-          // console.log("------", evt)
-          iceSignal = JSON.stringify({"type":"ICE", "message": JSON.stringify({ 'candidate': evt.candidate }), "gameID":SIGNAL_ID, "userID":USER_ID})
-          ws.send(iceSignal);
-        }
-
-        displaySignalMessage("completed that ice candidate...");
+    rtcPeerConn.onicecandidate = ({candidate}) => {
+      let canSignal = JSON.stringify({ candidate: candidate, "gameID":SIGNAL_ID, "userID":USER_ID });
+      ws.send(canSignal);
     };
 
-    rtcPeerConn.onnegotiationneeded = function () {
-        displaySignalMessage("on negotiation called");
-        rtcPeerConn.createOffer().then(sendLocalDesc).catch((e)=>{console.log(e)});
+    rtcPeerConn.onnegotiationneeded = async () => {
+      try {
+        makingOffer = true;
+        await rtcPeerConn.setLocalDescription();
+      let sdpSignal = JSON.stringify({ description: rtcPeerConn.localDescription, "gameID":SIGNAL_ID, "userID":USER_ID });
+      ws.send(sdpSignal);
+      } catch(err) {
+        console.error(err);
+      } finally {
+        makingOffer = false;
+      }
+    };
 
-    }
+    rtcPeerConn.oniceconnectionstatechange = () => {
+      if (rtcPeerConn.iceConnectionState === "failed") {
+        console.log("failed")
+        rtcPeerConn.restartIce();
+      }
+    };
+
 }
-
-function sendLocalDesc(description) {
-  console.log('Got description', description);
-  rtcPeerConn.setLocalDescription(description).then(function() {
-    let sdpSignal;
-    let desc = { 'sdp': description };
-    sdpSignal = JSON.stringify({"type":"SDP", "message": desc, "gameID":SIGNAL_ID, "userID":USER_ID});
-    ws.send(sdpSignal);
-  }).catch((e)=>{console.log(e)});
-}
-
-// function sendLocalDesc(desc) {
-//     let sdpSignal;
-//     rtcPeerConn.setLocalDescription(desc, function () {
-//         displaySignalMessage("sending local description");
-//         sdpSignal = JSON.stringify({"type":"SDP", "message": JSON.stringify({ 'sdp': rtcPeerConn.localDescription }), "gameID":SIGNAL_ID, "userID":USER_ID});
-//         ws.send(sdpSignal);
-//     }, (e)=>{console.log(e)});
-// }
 
 //Data Channel Specific methods
 function dataChannelStateChanged(event) {
   console.log("dataChannelStateChanged", event)
     if (dataChannel.readyState === 'open') {
-        displaySignalMessage("Data Channel open");
+        ws.close(); // might need to keep this open in case we lose webRTC connection
+        console.log("Data Channel open");
+        // close setup modal
+        // send your state
         dataChannel.onmessage = receiveDataChannelMessage;
     }
 }
 
 function receiveDataChannel(event) {
     console.log("receiveDataChannel", event)
-    displaySignalMessage("Receiving a data channel");
+    console.log("Receiving a data channel");
     dataChannel = event.channel;
     dataChannel.onmessage = receiveDataChannelMessage;
+    // on first recieve of state render
+    // start game (init)
+
+    // receiveChannel = event.channel;
+    // receiveChannel.onmessage = handleReceiveMessage;
+    // receiveChannel.onopen = handleReceiveChannelStatusChange;
+    // receiveChannel.onclose = handleReceiveChannelStatusChange;
 }
 
 function receiveDataChannelMessage(event) {
-    displayMessage("From DataChannel: " + event.data);
+    // update current state with opponent data and switch active player
+    console.log("From DataChannel: " + event.data);
 }
 
-//Logging/Display Methods
-
-function displayMessage(message) {
-    console.log(message)
+export const sendStateData = function sendStateData(state) {
+  console.log("test")
+  // dataChannel.send()
 }
 
-function displaySignalMessage(message) {
-    console.log(message)
-}
+///////// END WEBRTC CONNECTION //////////
 
 function makeid(length) {
   var result           = '';

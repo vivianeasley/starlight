@@ -4,7 +4,7 @@ import { initiateGame, joinGame, getGamesList } from '../web-rtc'
 export const matchmaking =  function matchmaking (state:any) {
     const { uiData } = state;
     const { listings, gameID, userID } = uiData;
-    console.log("hey", listings)
+    if (listings.description || listings.candidate === null) return ``;
     return html`
         ${
             listings.map((data:any, i:number) => html`
