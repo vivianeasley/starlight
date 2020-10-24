@@ -4,7 +4,7 @@ import { selectZoneView } from '../../data-methods/player-controls'
 export const playerControls =  function playerControls (state:any) {
     const { selectedZone } = state.uiData;
     const { zones } = state.data;
-    const { hand, damage, shields, wreckage, armor, deck } = zones;
+    const { hand, damage, wreckage, armor, deck } = zones;
 
     return html`
         <div class="control-area-wrapper">

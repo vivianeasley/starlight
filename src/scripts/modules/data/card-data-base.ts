@@ -5,4 +5,5 @@ export const cardBase = {
     controlledByPlayer: 1,
     isFaceDown: true,
     isLocked: false,
+    owner: undefined
 }

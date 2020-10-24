@@ -1,9 +1,11 @@
 import { html } from 'lighterhtml';
-import { initiateGame, joinGame, getGamesList } from '../web-rtc'
+import { initiateGame, joinGame, getGamesList } from '../data-methods/web-rtc'
+
+// move into modal
 
 export const matchmaking =  function matchmaking (state:any) {
     const { uiData } = state;
-    const { listings, gameID, userID } = uiData;
+    const { listings, gameID } = uiData;
     if (listings.description || listings.candidate === null) return ``;
     return html`
         ${
@@ -19,9 +21,3 @@ export const matchmaking =  function matchmaking (state:any) {
 
     `;
 }
-
-// // button host game
-// // button for each game shown join  game
-// // reload list
-
-// // make sure not your name/id so you don't try to  start a game with yourself... unless that's what you want

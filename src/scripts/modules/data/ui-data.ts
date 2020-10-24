@@ -1,6 +1,7 @@
 export const uiData = {
+    gameStarted: false,
     round: 0,
-    playerId: 1,
+    playerId: 2,
     selectedZone: "hand",
     numberOfCardsSelectable: 0,
     activePlayer: true,
@@ -16,11 +17,14 @@ export const uiData = {
     // matchmaking
     gameID: undefined,
     userID: undefined,
-    allOffers: [],
-    yourId: undefined,
-    yourName: undefined,
+    userName: undefined,
     listings: [],
     peerObj: undefined,
     connection: undefined,
-    opponentInfo: undefined
+    opponentInfo: undefined,
+
+    // modals
+    modals: {
+        matchmaking: true
+    }
 };

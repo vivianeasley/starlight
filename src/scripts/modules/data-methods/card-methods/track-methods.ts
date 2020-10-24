@@ -1,4 +1,4 @@
-import { updateState } from "../../state-management/immer-state"
+import { updateState, updateStateSend } from "../../state-management/immer-state"
 
 export const selectCards = function selectCards (index:number, state:any, cardInZone:string) {
     const {
@@ -27,7 +27,10 @@ export const placeCard = function placeCard (index:number, state:any, cardInZone
         selectableZones,
         placingCards,
         waiting,
+        activePlayer
     } = state.uiData;
+    if (!activePlayer) return;
+
     const { zones } = state.data;
     const { placingTrack } = zones;
 
@@ -77,22 +80,22 @@ export const unplaceCard = function unplaceCard (index:number) {
 }
 
 export const submitCards = function submitCards () {
-
-    updateState((state:any)=>{
+    updateStateSend((state:any)=>{
         if (state.data.zones.placingTrack.length > 1) {
             let damageIndex = state.data.zones.placingTrack[0].type === "damage" ? 0 : 1;
             let cardIndex = state.data.zones.placingTrack[1].type === "damage" ? 0 : 1;
-            console.log(damageIndex, cardIndex)
 
             state.data.zones.placingTrack[cardIndex].underDamage.push(state.data.zones.placingTrack[damageIndex]);
             state.data.zones.placingTrack.splice(damageIndex, 1);
 
             state.data.zones.track.push(state.data.zones.placingTrack[cardIndex]);
             state.data.zones.placingTrack.splice(cardIndex, 1);
+            state.uiData.activePlayer = !state.uiData.activePlayer;
             return;
         }
         state.data.zones.track.push(state.data.zones.placingTrack[0]);
         state.data.zones.placingTrack.splice(0, 1);
+        state.uiData.activePlayer = !state.uiData.activePlayer;
 
     });
 }

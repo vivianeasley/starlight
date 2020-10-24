@@ -7,6 +7,7 @@ export const generateDeck = function generateDeck (event:any) {
         let i = 0;
         while (i < 6) {
             const token = getTestCard();
+            token.owner = state.uiData.userID;
             token.image = "card-" + getRandomArbitrary(1, 20) + ".jpg";
             state.data.zones.hand.push(token);
             i++;
@@ -15,6 +16,7 @@ export const generateDeck = function generateDeck (event:any) {
         let k = 0;
         while (k < 30) {
             const token = getTestCard();
+            token.owner = state.uiData.userID;
             token.image = "card-" + getRandomArbitrary(1, 20) + ".jpg";
             state.data.zones.deck.push(token);
             k++;

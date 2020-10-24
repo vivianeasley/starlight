@@ -7,6 +7,7 @@ export const trackCard = function trackCard (cardData:any, index:number, state:a
         selectableZones,
         placingCards,
         waiting,
+        userID
     } = state.uiData;
 
     function selectableCard () {
@@ -19,7 +20,7 @@ export const trackCard = function trackCard (cardData:any, index:number, state:a
 
     function placableCard () {
         return html`
-        <div class="card-wrapper" onclick=${(e:any)=>{placeCard(index, state, selectedZone, e)}}>
+        <div class="${ cardData.owner ===  userID ? "card-wrapper" : "card-wrapper flipped"}" onclick=${(e:any)=>{placeCard(index, state, selectedZone, e)}}>
             ${
                 cardData.underDamage && cardData.underDamage.length > 0 ?
                 html`

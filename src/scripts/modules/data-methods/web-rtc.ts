@@ -1,16 +1,16 @@
-import { updateState } from "./state-management/immer-state"
+import { updateState, getCurrentState } from "../state-management/immer-state"
 
 ///// BEGIN WEBRTC & SOCKET CONFIG /////
-
 let ignoreOffer = false;
 let makingOffer = false;
 let polite = true;
 
-const host = location.origin.replace(/^http/, 'ws')
-const hostPort = host.replace("8080", '3000')
-const ws = new WebSocket(hostPort+"/connect")
-let SIGNAL_ID = makeid(8);
-let USER_ID = makeid(8);
+const host = location.origin.replace(/^http/, 'ws');
+const hostPort = host.replace("8080", '3000');
+console.log(hostPort+"/connect")
+const ws = new WebSocket(hostPort+"/connect");
+let SIGNAL_ID;
+let USER_ID;
 let configuration = {
   iceServers: [
     {
@@ -50,8 +50,26 @@ ws.onmessage = (msg) => {
 
 ///////// END MATCH MAKING METHODS //////////
 
-export const initiateGame = function initiateGame () {
-  const initialRequestStr = JSON.stringify({"type":"LIST", "gameID":SIGNAL_ID, "userID":USER_ID, "userName":"anonymous"})
+export const setName = function setName (event:any, state:any) {
+  SIGNAL_ID = state.uiData.gameID;
+  USER_ID = state.uiData.userID;
+
+  let inputValue = event.target.parentNode.querySelector("input").value;
+  if (!inputValue || inputValue === "") {
+    inputValue = "Anonymous";
+  };
+  const initialRequestStr = JSON.stringify({"type":"GAMES"})
+  ws.send(initialRequestStr);
+  updateState((state:any)=>{
+    state.uiData.userName = inputValue;
+  });
+
+}
+
+
+export const initiateGame = function initiateGame (userName:string) {
+  if (!userName) return;
+  const initialRequestStr = JSON.stringify({"type":"LIST", "gameID":SIGNAL_ID, "userID":USER_ID, "userName":userName})
   ws.send(initialRequestStr);
   updateState((state:any)=>{
     state.uiData.gameID = SIGNAL_ID;
@@ -65,6 +83,7 @@ export const joinGame = function joinGame (gameID:string) {
   ws.send(initialRequestStr);
   updateState((state:any)=>{
     state.uiData.gameID = gameID;
+    state.uiData.activePlayer = false;
   });
 }
 
@@ -162,19 +181,24 @@ async function startSignaling() {
 
 //Data Channel Specific methods
 function dataChannelStateChanged(event) {
-  console.log("dataChannelStateChanged", event)
     if (dataChannel.readyState === 'open') {
         ws.close(); // might need to keep this open in case we lose webRTC connection
         console.log("Data Channel open");
         // close setup modal
         // send your state
+        const currentState = getCurrentState();
+        sendStateData(currentState.data.zones);
+
         dataChannel.onmessage = receiveDataChannelMessage;
     }
 }
 
 function receiveDataChannel(event) {
-    console.log("receiveDataChannel", event)
-    console.log("Receiving a data channel");
+
+    // updateState((state:any)=>{
+    //   state.uiData.modals.matchmaking = false;
+    // });
+
     dataChannel = event.channel;
     dataChannel.onmessage = receiveDataChannelMessage;
     // on first recieve of state render
@@ -186,14 +210,35 @@ function receiveDataChannel(event) {
     // receiveChannel.onclose = handleReceiveChannelStatusChange;
 }
 
-function receiveDataChannelMessage(event) {
+function receiveDataChannelMessage(event:any) {
+    const gameData = JSON.parse(event.data);
+
+    // if passed don't update data
+    // change active player
+    // disable submit button
+
+    updateState((state:any)=>{
+      if (state.uiData.gameStarted === false) { // check if data
+        state.uiData.gameStarted = true;
+        state.uiData.modals.matchmaking = false;
+      }
+      state.data.opponentZones = gameData;
+      state.data.zones.track = state.data.opponentZones.track;
+      state.uiData.activePlayer = !state.uiData.activePlayer;
+    });
+
+    // set opponent data
+    // render
+
+    // if no state data then it's a ping and we start our 10 second clock and send ping
+    // if 40 second without ping tell user connection has been severed
     // update current state with opponent data and switch active player
-    console.log("From DataChannel: " + event.data);
+    // console.log("From DataChannel: " + event.data);
 }
 
-export const sendStateData = function sendStateData(state) {
-  console.log("test")
-  // dataChannel.send()
+export function sendStateData(state) {
+  const stateStr = JSON.stringify(state);
+  dataChannel.send(stateStr)
 }
 
 ///////// END WEBRTC CONNECTION //////////

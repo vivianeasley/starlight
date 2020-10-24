@@ -1,4 +1,18 @@
 export const data = {
+    opponentVisibleZones: {
+        deck: false,
+        hand: false
+    },
+    opponentZones: {
+        placingTrack: [],
+        track: [],
+        deck: [],
+        hand: [],
+        wreckage: [],
+        armor: [],
+        ship: [],
+        damage: []
+    },
     zones: {
         placingTrack: [],
         track: [],
