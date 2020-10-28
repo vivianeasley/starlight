@@ -27,12 +27,7 @@ export const playerControls =  function playerControls (state:any) {
                 tabindex="3"
                 role="button"
                 aria-pressed="false">Wreckage ${wreckage.length}</div>
-            <div
-                class="${selectedZone === "armor" ? "control-area selected" : "control-area"}"
-                onclick=${()=>{selectZoneView(state, "armor")}}
-                tabindex="4"
-                role="button"
-                aria-pressed="false">Armor ${armor.length}</div>
+
             <div
                 class="${selectedZone === "deck" ? "control-area selected" : "control-area"}"
                 onclick=${()=>{selectZoneView(state, "deck")}}
@@ -43,6 +38,13 @@ export const playerControls =  function playerControls (state:any) {
     `;
 }
 
+
+// <div
+// class="${selectedZone === "armor" ? "control-area selected" : "control-area"}"
+// onclick=${()=>{selectZoneView(state, "armor")}}
+// tabindex="4"
+// role="button"
+// aria-pressed="false">Armor ${armor.length}</div>
 
 // <div
 // class="${selectedZone === "shields" ? "control-area selected" : "control-area"}"

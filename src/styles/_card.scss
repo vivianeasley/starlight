@@ -1,9 +1,6 @@
 .card-wrapper {
-    width: 175px;
-    height: 230px;
     background-color: rgb(0, 0, 0);
     border-radius: 6px;
-    border: 1px solid white;
     position: relative;
 }
 
@@ -28,12 +25,111 @@
 }
 
 .card-image-top-wrapper {
-    width: 175px;
-    height: 230px;
+    width: 190px;
+    height: 320px;
     background-color: rgb(0, 0, 0);
     border-radius: 6px;
     border: 1px solid white;
     position: absolute;
     top: 3px;
     left: 4px;
+}
+
+
+//// New Card Styles
+.sc-wrapper-border {
+    width: 190px;
+    height: 320px;
+    padding: 10px;
+    background-color: black;
+    border-radius: 8px;
+}
+.sc-wrapper {
+    position:relative;
+    width: 170px;
+    height: 298px;
+    overflow: hidden;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.sc-image {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    display: block;
+}
+.sc-border {
+    position:absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+}
+.sc-name {
+    position: absolute;
+    z-index: 10;
+    top: 6px;
+    left: 10px;
+    right: 10px;
+    color: #a2a2a2;
+    font-size: 13px;
+    font-weight: bold;
+}
+.sc-position {
+    position: absolute;
+    z-index: 10;
+    font-weight: 700;
+    width: 40px;
+    height: 40px;
+    top: 35px;
+    left: 0;
+    text-align: center;
+    font-size: 20px;
+}
+.sc-types-box {
+    position: absolute;
+    top: 141px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background-color: #00752f;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+}
+.sc-types {
+    color: white;
+    margin-left: 4px;
+    font-size: 12px;
+    line-height: 1rem;
+    text-transform: capitalize;
+}
+.sc-rules {
+    position:absolute;
+    z-index: 10;
+    top: 166px;
+    left: 17px;
+    right: 19px;
+    font-size: 11px;
+    line-height: 0.65rem;
+    white-space: normal;
+    text-align: left;
+}
+.sc-rank-icon {
+    position:absolute;
+    z-index: 9;
+    position: absolute;
+    top: 25px;
+    left: -3px;
+    z-index: 9;
+    max-width: 47px;
+}
+.sc-lock-icon {
+    position:absolute;
+    bottom: 10px;
+    right: 3px;
+    z-index: 10;
+    max-width: 32px;
 }

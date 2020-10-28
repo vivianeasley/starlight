@@ -2,11 +2,7 @@
 import { data } from './modules/data/data';
 import { uiData } from './modules/data/ui-data';
 import { initState } from "./modules/state-management/immer-state";
-// import { initWebRTC } from "./modules/web-rtc"
 
-// window.onload = () => {
-//     initWebRTC()
-// }
 uiData.gameID = makeid(8);
 uiData.userID = makeid(8);
 
@@ -16,8 +12,6 @@ const state = {
 }
 
 initState(state);
-
-
 
 function makeid(length) {
     var result           = '';

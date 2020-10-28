@@ -9,6 +9,7 @@ export const uiData = {
     selectableZones: [],
     placingCards: true,
     waiting: false,
+    oppPassed: false,
 
     trackResolving: false,
     startingPlayer: true,

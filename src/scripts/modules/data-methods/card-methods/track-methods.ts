@@ -80,6 +80,7 @@ export const unplaceCard = function unplaceCard (index:number) {
 }
 
 export const submitCards = function submitCards () {
+    console.log("submit hit")
     updateStateSend((state:any)=>{
         if (state.data.zones.placingTrack.length > 1) {
             let damageIndex = state.data.zones.placingTrack[0].type === "damage" ? 0 : 1;

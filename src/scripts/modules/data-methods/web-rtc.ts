@@ -1,4 +1,5 @@
 import { updateState, getCurrentState } from "../state-management/immer-state"
+import { gameSetUp, updateOpponentsData, opponentPassed } from "../data-methods/card-methods/general"
 
 ///// BEGIN WEBRTC & SOCKET CONFIG /////
 let ignoreOffer = false;
@@ -187,22 +188,17 @@ function dataChannelStateChanged(event) {
         // close setup modal
         // send your state
         const currentState = getCurrentState();
-        sendStateData(currentState.data.zones);
+        if (currentState.uiData.gameStarted === false) {
+          gameSetUp();
+        }
 
         dataChannel.onmessage = receiveDataChannelMessage;
     }
 }
 
 function receiveDataChannel(event) {
-
-    // updateState((state:any)=>{
-    //   state.uiData.modals.matchmaking = false;
-    // });
-
     dataChannel = event.channel;
     dataChannel.onmessage = receiveDataChannelMessage;
-    // on first recieve of state render
-    // start game (init)
 
     // receiveChannel = event.channel;
     // receiveChannel.onmessage = handleReceiveMessage;
@@ -211,21 +207,19 @@ function receiveDataChannel(event) {
 }
 
 function receiveDataChannelMessage(event:any) {
-    const gameData = JSON.parse(event.data);
+  const gameData = JSON.parse(event.data);
+    if (gameData === "passed") {
+      alert("Opponent passed. If you pass now the round will end.");
+      opponentPassed();
+      return;
+    }
+    updateOpponentsData(gameData);
 
     // if passed don't update data
     // change active player
     // disable submit button
 
-    updateState((state:any)=>{
-      if (state.uiData.gameStarted === false) { // check if data
-        state.uiData.gameStarted = true;
-        state.uiData.modals.matchmaking = false;
-      }
-      state.data.opponentZones = gameData;
-      state.data.zones.track = state.data.opponentZones.track;
-      state.uiData.activePlayer = !state.uiData.activePlayer;
-    });
+
 
     // set opponent data
     // render

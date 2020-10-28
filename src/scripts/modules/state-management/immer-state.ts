@@ -7,8 +7,6 @@ const lastState = [];
 
 export function initState (data:any) {
     lastState.push(data);
-    // renderDOM(lastState[0]);
-
     generateDeck(data);
 
 }
@@ -28,7 +26,14 @@ export const updateStateSend = function updateState (updateFucnt:any) {
         console.log("data sent!");
         sendStateData(lastState[lastState.length - 1].data.zones)
     }
-    console.log(nextState)
+    return true;
+}
+
+export const updateStateSendPass = function updateStateSendPass (updateFucnt:any) {
+    const nextState = produce(lastState[lastState.length - 1], updateFucnt);
+    renderDOM(nextState);
+    lastState.push(nextState);
+    sendStateData("passed")
     return true;
 }
 

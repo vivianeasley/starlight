@@ -9,6 +9,9 @@
 }
 
 .track-card-wrapper {
+    border: 4px solid white;
+    border-radius: 8px;
+    position:relative;
     display: inline-block;
     vertical-align: top;
     margin: 40px 1px 10px 1px;
@@ -17,15 +20,33 @@
 .track-card-placement-wrapper {
     display: inline-block;
     vertical-align: top;
-    margin: 1px;
 }
 
 .track-card-placement-zone {
-    min-width: 175px;
-    min-height: 230px;
-    border: 1px solid grey;
+    position: relative;
+    min-width: 190px;
+    min-height: 320px;
     white-space: normal;
     text-align: center;
+}
+
+.track-card-placement-button {
+    display: block;
+    width: 100%;
+}
+
+.space-num {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  z-index: 15;
+  color: #000000;
+  text-align:center;
+  border-bottom-left-radius: 15px;
+  top: 0;
+  right: 0;
+  background: #ffffff;
+  line-height: 1.8;
 }
 
 .view-area-wrapper {
@@ -34,10 +55,10 @@
     white-space: nowrap;
     padding: 5px;
     margin: 5px;
-    background-color: blue;
+    background-color: rgba(228, 228, 255, 0.44);
     border-radius: 4px;
     text-align: center;
-    min-height: 200px;
+    min-height: 350px;
 }
 
 .deck-area-wrapper {

@@ -3,32 +3,27 @@ import { updateState } from "./state-management/immer-state"
 import { shuffle } from 'lodash-es';
 
 export const generateDeck = function generateDeck (event:any) {
+    const baseCard = getGeneralCardData();
     updateState((state:any)=>{
         let i = 0;
         while (i < 6) {
-            const token = getTestCard();
-            token.owner = state.uiData.userID;
-            token.image = "card-" + getRandomArbitrary(1, 20) + ".jpg";
-            state.data.zones.hand.push(token);
+            let card = getTwoCards();
+            const random = Math.floor(Math.random() * card.length);
+            let fullCard = {...baseCard, ...card[random]};
+            fullCard.owner = state.uiData.userID;
+            state.data.zones.deck.push(fullCard);
             i++;
           }
 
         let k = 0;
-        while (k < 30) {
-            const token = getTestCard();
-            token.owner = state.uiData.userID;
-            token.image = "card-" + getRandomArbitrary(1, 20) + ".jpg";
-            state.data.zones.deck.push(token);
+        while (k < 34) {
+            let card = getOneCards();
+            const random = Math.floor(Math.random() * card.length);
+            let fullCard = {...baseCard, ...card[random]};
+            fullCard.owner = state.uiData.userID;
+            state.data.zones.deck.push(fullCard);
             k++;
         }
-
-        // let j = 0;
-        // while (j < 4) {
-        //     const token = getTestCard();
-        //     token.image = "card-" + getRandomArbitrary(1, 20) + ".jpg";
-        //     state.data.zones.track.push(token);
-        //     j++;
-        // }
 
         state.data.zones.deck = shuffle(state.data.zones.deck);
     });
@@ -38,4 +33,132 @@ export const generateDeck = function generateDeck (event:any) {
 function getRandomArbitrary(min:number, max:number) {
     const randNum = Math.floor(Math.random() * ((max+1) - min) + min);
     return randNum;
+}
+
+function getOneCards () {
+    return [
+        {
+            id: "1-1",
+            name: "B. E. Thorton",
+            image: "card-1.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "science",
+            place: 1,
+            rank: 4,
+            locked: false,
+            underDamage: false,
+            rules: "Return this card to it's owner's hand.",
+            functs: ["targetThisCard", "trackToHand"]
+        },
+        {
+            id: "1-2",
+            name: "M. A. Gideon",
+            image: "card-2.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "medical",
+            place: 2,
+            rank: 4,
+            locked: false,
+            underDamage: false,
+            rules: "Return the previous card on the track to its owner's hand.",
+            functs: ["targetPrevious", "trackToHand"]
+        },
+        {
+            id: "1-3",
+            name: "D. J. Carson",
+            image: "card-3.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "medical",
+            place: 3,
+            rank: 4,
+            locked: false,
+            underDamage: false,
+            rules: "Return the top card of your wreckage pile to your hand.",
+            functs: ["targetTopWreckage", "wreckageToHand"]
+        },
+    ]
+}
+
+function getTwoCards () {
+    return [
+        {
+            id: "1-4",
+            name: "J. I. Xemeno",
+            image: "card-4.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "tactical",
+            place: 5,
+            rank: 3,
+            locked: false,
+            underDamage: false,
+            rules: "Send the previous card on the track to its owner's wreckage pile.",
+            functs: ["targetPrevious","trackToWreckage"]
+        },
+        {
+            id: "1-4",
+            name: "V. A. Ilic",
+            image: "card-4.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "tactical",
+            place: 8,
+            rank: 3,
+            locked: false,
+            underDamage: false,
+            rules: "Deal 2 damage to your opponents ship.",
+            functs: ["amountTwo", "armorToWreckage"]
+        },
+        {
+            id: "1-4",
+            name: "M. E. Kuqi",
+            image: "card-5.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "engineer",
+            place: 9,
+            rank: 3,
+            locked: false,
+            underDamage: false,
+            rules: "Put the top card of your deck on top of your armor pile.",
+            functs: ["deckToWreckage"]
+        },
+    ]
+}
+
+function getThreeCards () {
+    return []
+}
+
+function getFourCards () {
+    return []
+}
+
+function getGeneralCardData () {
+    return {
+        locked: false,
+        underDamage: false,
+        owner: undefined
+    }
+}
+
+function getDamageCardData () {
+    return {
+        id: "0-0",
+        name: "Damage",
+        image: undefined,
+        type: "damage",
+        typeAlign: undefined,
+        typeJob: undefined,
+        place: 0,
+        rank: 4,
+        rules: "Deal 1 damage to an opponents ship.",
+        functs: ["damage"],
+        locked: false,
+        underDamage: false,
+        owner: undefined,
+    }
 }

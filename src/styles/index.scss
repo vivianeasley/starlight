@@ -53,7 +53,8 @@
 @import '_card.scss';
 
 body {
-  background-color: white;
+  background-color: black;
+  background-image: url("/images/space-tile.jpg");
   font-family: 'Expletus Sans', cursive;
   margin: 0;
   padding: 0;
@@ -65,9 +66,8 @@ img {
 }
 
 .control-area-wrapper {
-  // border-top: 1px solid gray;
-  // border-bottom: 1px solid gray;
   margin: 4px;
+  text-align: center;
 }
 
 .control-area-wrapper.disabled {
@@ -84,14 +84,16 @@ img {
   vertical-align: top;
   padding: 10px;
   cursor: pointer;
+  color: white;
+  border-radius: 8px;
 }
 
 .control-area.selected {
-  background-color: green;
+  background-color: #3481c3;
 }
 
 .control-area:hover {
-  background-color: #f1f1f1;
+  background-color: #656565;
   border-color: grey;
 }
 
@@ -99,10 +101,48 @@ img {
   display: inline-block;
   vertical-align: top;
   padding: 10px;
-  background-color: #f1f1f1
+  color: white;
 }
 
-//////
+////// opponents control area ////
+
+.opp-control-area-wrapper {
+  font-size: 12px;
+  text-align: center;
+}
+
+.opp-control-area {
+  border: 1px solid gray;
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+  border-radius: 6px;
+}
+
+.opp-control-area.disabled {
+  pointer-events: none;
+  opacity:0.3;
+}
+
+.opp-control-area.selected {
+  background-color: red;
+}
+
+.opp-control-area:hover {
+  background-color: #6d6d6d;
+  border-color: grey;
+}
+
+.opp-control-area-title {
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  color: white;
+}
+
+/////
 
 .directions-wrapper {
   border-bottom: 1px solid grey;
