@@ -47,7 +47,7 @@ function getOneCards () {
             place: 1,
             rank: 4,
             locked: false,
-            underDamage: false,
+            underDamage: [],
             rules: "Return this card to it's owner's hand.",
             functs: ["targetThisCard", "trackToHand"]
         },
@@ -61,7 +61,7 @@ function getOneCards () {
             place: 2,
             rank: 4,
             locked: false,
-            underDamage: false,
+            underDamage: [],
             rules: "Return the previous card on the track to its owner's hand.",
             functs: ["targetPrevious", "trackToHand"]
         },
@@ -75,7 +75,7 @@ function getOneCards () {
             place: 3,
             rank: 4,
             locked: false,
-            underDamage: false,
+            underDamage: [],
             rules: "Return the top card of your wreckage pile to your hand.",
             functs: ["targetTopWreckage", "wreckageToHand"]
         },
@@ -94,7 +94,7 @@ function getTwoCards () {
             place: 5,
             rank: 3,
             locked: false,
-            underDamage: false,
+            underDamage: [],
             rules: "Send the previous card on the track to its owner's wreckage pile.",
             functs: ["targetPrevious","trackToWreckage"]
         },
@@ -108,7 +108,7 @@ function getTwoCards () {
             place: 8,
             rank: 3,
             locked: false,
-            underDamage: false,
+            underDamage: [],
             rules: "Deal 2 damage to your opponents ship.",
             functs: ["amountTwo", "armorToWreckage"]
         },
@@ -122,7 +122,7 @@ function getTwoCards () {
             place: 9,
             rank: 3,
             locked: false,
-            underDamage: false,
+            underDamage: [],
             rules: "Put the top card of your deck on top of your armor pile.",
             functs: ["deckToWreckage"]
         },
@@ -140,25 +140,7 @@ function getFourCards () {
 function getGeneralCardData () {
     return {
         locked: false,
-        underDamage: false,
+        underDamage: [],
         owner: undefined
-    }
-}
-
-function getDamageCardData () {
-    return {
-        id: "0-0",
-        name: "Damage",
-        image: undefined,
-        type: "damage",
-        typeAlign: undefined,
-        typeJob: undefined,
-        place: 0,
-        rank: 4,
-        rules: "Deal 1 damage to an opponents ship.",
-        functs: ["damage"],
-        locked: false,
-        underDamage: false,
-        owner: undefined,
     }
 }

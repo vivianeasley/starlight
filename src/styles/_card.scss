@@ -7,7 +7,8 @@
 .card-wrapper.flipped {
     transition: transform 200ms ease-in-out;
     transform: rotate(180deg);
-    margin: 10px 1px 10px 1px;
+    // margin: 10px 1px 10px 1px;
+    background-color: red;
 }
 
 .card-wrapper.selected {
@@ -20,8 +21,8 @@
 
 .card-image {
     margin: 10px;
-    max-width: 155px;
-    max-height: 210px;
+    width: 170px;
+    height: 298px;
 }
 
 .card-image-top-wrapper {
@@ -31,10 +32,28 @@
     border-radius: 6px;
     border: 1px solid white;
     position: absolute;
-    top: 3px;
-    left: 4px;
+    top: 5px;
+    right: 0px;
+    z-index: 12;
 }
 
+.card-image-top-wrapper.transparent {
+    opacity: 0.8;
+}
+
+.card-image-top-wrapper.transparent:hover {
+    opacity: 0;
+}
+
+.armor-value {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    text-align: center;
+    font-weight: bold;
+}
 
 //// New Card Styles
 .sc-wrapper-border {
@@ -43,6 +62,9 @@
     padding: 10px;
     background-color: black;
     border-radius: 8px;
+}
+.sc-wrapper-border.opponent {
+    background-color: rgb(103, 0, 0);
 }
 .sc-wrapper {
     position:relative;

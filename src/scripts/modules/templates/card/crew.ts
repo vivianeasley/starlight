@@ -1,20 +1,30 @@
 import { html } from 'lighterhtml';
 
-export const crewCard = function crewCard (cardData:any) {
+export const crewCard = function crewCard (cardData:any, isFaceDown:boolean, ownedByPlayer:boolean) {
     if (cardData.type === "damage") {
         return html`
-            <div class="sc-wrapper-border">
+            <div class="${borderColor()}">
+                <div class="sc-wrapper">
+                    <img class="sc-image" src="./images/cards/damage.jpg" alt="">
+                </div>
+            </div>
+        `
+    }
+
+    if (isFaceDown) {
+        return html`
+            <div class="${borderColor()}">
                 <div class="sc-wrapper">
                     <img class="sc-image" src="./images/cards/card-backs.jpg" alt="">
                 </div>
             </div>
         `
     }
+
     return html`
-    <div class="sc-wrapper-border">
+    <div class="${borderColor()}">
         <div class="sc-wrapper">
             <img class="sc-image" src="${"./images/crew/"+cardData.image}" alt="">
-            <img class="sc-image-border" src="./images/image-border.png" alt="">
             <img class="sc-border" src="./images/card-assets/crew-border.png" alt="">
             <div class="sc-name">${getRankTitle(cardData.rank)} ${cardData.name}</div>
             <div class="sc-position">${cardData.place}</div>
@@ -66,5 +76,10 @@ export const crewCard = function crewCard (cardData:any) {
         console.log(Math.ceil(range/20), baseFontSize + sizePoints, baseLineHeight + lhPoints);
         return `font-size:${baseFontSize - sizePoints}px;line-height:${baseLineHeight + lhPoints}rem;`;
 
+    }
+
+    function borderColor () {
+        if (ownedByPlayer) return "sc-wrapper-border";
+        return "sc-wrapper-border opponent"
     }
 }

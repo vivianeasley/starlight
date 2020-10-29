@@ -17,6 +17,10 @@
     margin: 40px 1px 10px 1px;
 }
 
+.track-card-wrapper.disabled {
+    pointer-events: none;
+}
+
 .track-card-placement-wrapper {
     display: inline-block;
     vertical-align: top;

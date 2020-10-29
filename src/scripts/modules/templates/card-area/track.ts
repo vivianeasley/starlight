@@ -3,15 +3,32 @@ import { trackCard } from "../card/track";
 import { trackPlacementCard } from "../card/track-placement";
 import { submitCards } from "../../data-methods/card-methods/track-methods";
 import { pass } from "../../data-methods/card-methods/general";
+import { shipCard } from "../card/ship"
 
 export const zoneTrackArea =  function zoneTrackArea (state:any) {
     const { data, uiData } = state;
-    const { playerId, activePlayer } = uiData;
+    const { activePlayer } = uiData;
     const { zones } = data;
     const { track, placingTrack } = zones;
 
     return html`
         <div class="track-area-wrapper">
+            ${shipCard(state)}
+            ${
+                state.data.zones.armor.length > 0 ?
+                html`
+                    <div class="track-card-wrapper">
+                    <div class="space-num">0</div>
+                        <div class="sc-wrapper-border">
+                            <div class="sc-wrapper">
+                                <img class="sc-image" src="./images/cards/card-backs.jpg" alt="">
+                            </div>
+                        </div>
+                        <div class="armor-value">Armor Pile: ${state.data.zones.armor.length} cards</div>
+                    </div>
+                `:
+                ``
+            }
             ${
                 track.map((data:any, i:number) => html`
                     <div class="track-card-wrapper">

@@ -6,7 +6,7 @@ export const trackPlacementCard = function trackPlacementCard (cardData:any, ind
 
     return html`
         <div class="card-wrapper" onclick=${()=>{unplaceCard(index)}}>
-            ${crewCard(cardData)}
+            ${crewCard(cardData, false, true)}
         </div>
     `;
 }

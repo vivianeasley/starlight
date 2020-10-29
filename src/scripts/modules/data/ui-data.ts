@@ -6,7 +6,8 @@ export const uiData = {
     numberOfCardsSelectable: 0,
     activePlayer: true,
     // 3 player states
-    selectableZones: [],
+    eventsDisabledZones: ["wreckage", "deck", "ship", "armor", "track"],
+    faceDownZones: ["deck", "armor"],
     placingCards: true,
     waiting: false,
     oppPassed: false,

@@ -22,7 +22,9 @@ export const selectCards = function selectCards (index:number, state:any, cardIn
     });
 }
 
-export const placeCard = function placeCard (index:number, state:any, cardInZone:string, event:any) {
+export const placeCard = function placeCard (index:number, state:any, cardInZone:string, event:any, isNotClickable:boolean) {
+    console.log(isNotClickable)
+    if (isNotClickable) return;
     const {
         selectableZones,
         placingCards,
@@ -34,10 +36,6 @@ export const placeCard = function placeCard (index:number, state:any, cardInZone
     const { zones } = state.data;
     const { placingTrack } = zones;
 
-    if (placingCards === false || waiting === true || selectableZones.length > 0) {
-        console.error("can't place cards - track methods ", placingCards, waiting, selectableZones.length);
-        return;
-    }
 
     if (placingTrack.length > 1) {
         alert("You may only place 1 card from your hand and 1 damage card on top of it");
@@ -80,11 +78,12 @@ export const unplaceCard = function unplaceCard (index:number) {
 }
 
 export const submitCards = function submitCards () {
-    console.log("submit hit")
     updateStateSend((state:any)=>{
         if (state.data.zones.placingTrack.length > 1) {
             let damageIndex = state.data.zones.placingTrack[0].type === "damage" ? 0 : 1;
             let cardIndex = state.data.zones.placingTrack[1].type === "damage" ? 0 : 1;
+
+            console.log(cardIndex, damageIndex)
 
             state.data.zones.placingTrack[cardIndex].underDamage.push(state.data.zones.placingTrack[damageIndex]);
             state.data.zones.placingTrack.splice(damageIndex, 1);

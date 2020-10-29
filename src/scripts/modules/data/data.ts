@@ -22,7 +22,7 @@ export const data = {
         armor: [],
         ship: [{
             id: "1ship-1",
-            image: "nautalis",
+            image: "ship-1.jpg",
             borderImage: "ship",
             name: "The Nautalis",
             draw: 4,

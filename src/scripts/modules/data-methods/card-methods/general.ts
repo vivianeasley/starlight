@@ -25,6 +25,7 @@ export const gameSetUp = function gameSetUp () {
         moveCards(state.data.zones.deck, state.data.zones.armor, state.data.zones.ship[0].armor, true);
         for (let index = 0; index < state.data.zones.ship[0].damage; index++) {
             const damageCard = getDamageCardData();
+            damageCard.owner = state.uiData.userID;
             state.data.zones.damage.push(damageCard);
         }
         state.uiData.gameStarted = true;
@@ -83,7 +84,7 @@ function getDamageCardData () {
     return {
         id: "0-0",
         name: "Damage",
-        image: undefined,
+        image: "damage.jpg",
         type: "damage",
         typeAlign: undefined,
         typeJob: undefined,
