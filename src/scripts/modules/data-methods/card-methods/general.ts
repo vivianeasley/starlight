@@ -22,7 +22,7 @@ export const moveCardsZones = function moveCardsZones (fromZone:string, toZone:s
 
 export const gameSetUp = function gameSetUp () {
     updateStateSend((state:any)=>{
-        moveCards(state.data.zones.deck, state.data.zones.armor, state.data.zones.ship[0].armor, true);
+        // moveCards(state.data.zones.deck, state.data.zones.wreckage, state.data.zones.ship[0].armor, true);
         for (let index = 0; index < state.data.zones.ship[0].damage; index++) {
             const damageCard = getDamageCardData();
             damageCard.owner = state.uiData.userID;

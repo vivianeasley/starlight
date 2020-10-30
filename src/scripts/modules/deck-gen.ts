@@ -1,4 +1,4 @@
-import { getTestCard } from "../modules/decks/cards";
+// import { getTestCard } from "../modules/decks/cards";
 import { updateState } from "./state-management/immer-state"
 import { shuffle } from 'lodash-es';
 
@@ -46,6 +46,7 @@ function getOneCards () {
             typeJob: "science",
             place: 1,
             rank: 4,
+            wrecked: false,
             locked: false,
             underDamage: [],
             rules: "Return this card to it's owner's hand.",
@@ -60,6 +61,7 @@ function getOneCards () {
             typeJob: "medical",
             place: 2,
             rank: 4,
+            wrecked: false,
             locked: false,
             underDamage: [],
             rules: "Return the previous card on the track to its owner's hand.",
@@ -74,6 +76,7 @@ function getOneCards () {
             typeJob: "medical",
             place: 3,
             rank: 4,
+            wrecked: false,
             locked: false,
             underDamage: [],
             rules: "Return the top card of your wreckage pile to your hand.",

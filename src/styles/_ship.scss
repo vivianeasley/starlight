@@ -78,3 +78,14 @@
     background-color: red;
     color: white;
 }
+.ship-damage {
+    background: url("/images/card-assets/ship-damage.png") no-repeat center center;
+    background-size: cover;
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    z-index: 12;
+    padding: 24px;
+    top: 40px;
+    font-weight: bold;
+}

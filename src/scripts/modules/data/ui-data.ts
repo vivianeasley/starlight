@@ -5,6 +5,7 @@ export const uiData = {
     selectedZone: "hand",
     numberOfCardsSelectable: 0,
     activePlayer: true,
+    phaseDamage: 0,
     // 3 player states
     eventsDisabledZones: ["wreckage", "deck", "ship", "armor", "track"],
     faceDownZones: ["deck", "armor"],

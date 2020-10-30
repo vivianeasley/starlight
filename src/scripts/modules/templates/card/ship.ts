@@ -14,12 +14,21 @@ export const shipCard = function shipCard (state:any) {
                         <span class="ship-draw-num">${ship[0].draw}</span>: Draw ${ship[0].draw} cards at the beginning of each round.
                     </div>
                     <div class="ship-rule-armor">
-                        <span class="ship-armor-num">${ship[0].armor}</span> Start the game with ${ship[0].armor} armor cards.
+                        <span class="ship-armor-num">${ship[0].armor}</span> crew cards in your wreckage = lose.
                     </div>
                     <div class="ship-rule-damage">
                         <span class="ship-damage-num">${ship[0].damage}</span>  Start the game with ${ship[0].damage} damage cards.
                     </div>
                 </div>
+                ${
+                    state.uiData.phaseDamage > 0 ?
+                    html`
+                        <div class="ship-damage">
+                            ${state.uiData.phaseDamage}
+                        </div>
+                    `:
+                    ``
+                }
             </div>
         </div>
 `
