@@ -3,6 +3,8 @@ import { renderDOM } from "../templates/renderDOM"
 import { generateDeck } from "../deck-gen"
 import { sendStateData } from "../data-methods/web-rtc"
 
+// Remove history by default. Will enable to get analytics
+
 const lastState = [];
 
 export function initState (data:any) {

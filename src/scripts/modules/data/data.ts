@@ -1,7 +1,9 @@
 export const data = {
+    tmpZone: [],
     opponentVisibleZones: {
         deck: false,
-        hand: false
+        hand: false,
+        wreckage: false,
     },
     opponentZones: {
         placingTrack: [],
