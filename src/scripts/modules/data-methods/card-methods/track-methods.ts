@@ -23,7 +23,7 @@ export const selectCards = function selectCards (index:number, state:any, cardIn
 }
 
 export const placeCard = function placeCard (index:number, state:any, cardInZone:string, event:any, isNotClickable:boolean) {
-    console.log(isNotClickable)
+
     if (isNotClickable) return;
     const {
         selectableZones,
@@ -38,22 +38,27 @@ export const placeCard = function placeCard (index:number, state:any, cardInZone
 
 
     if (placingTrack.length > 1) {
-        alert("You may only place 1 card from your hand and 1 damage card on top of it");
+        updateState((state:any)=>{
+            state.uiData.phaseDesc = { text: "You may only place 1 card from your hand and 1 damage card on top of it", color: "#d06100" };
+        });
         return;
     }
 
     if (placingTrack.length === 1 && state.data.zones.placingTrack[0].type !== "damage" && state.data.zones[cardInZone][index].type !== "damage") {
-        alert("Only 1 damage card and one card from your hand allowed.");
+        updateState((state:any)=>{
+            state.uiData.phaseDesc = { text: "Only 1 damage card and one card from your hand allowed.", color: "#d06100" };
+        });
         return;
     }
 
     if (placingTrack.length === 1 && state.data.zones.placingTrack[0].type  === "damage" && state.data.zones[cardInZone][index].type === "damage") {
-        alert("Only 1 damage card and one card from your hand allowed.");
+        updateState((state:any)=>{
+            state.uiData.phaseDesc = { text: "Only 1 damage card and one card from your hand allowed.", color: "#d06100" };
+        });
         return;
     }
 
     updateState((state:any)=>{
-
         state.data.zones.placingTrack.push(state.data.zones[cardInZone][index]);
         state.data.zones[cardInZone].splice(index, 1);
 
@@ -83,8 +88,6 @@ export const submitCards = function submitCards () {
             let damageIndex = state.data.zones.placingTrack[0].type === "damage" ? 0 : 1;
             let cardIndex = state.data.zones.placingTrack[1].type === "damage" ? 0 : 1;
 
-            console.log(cardIndex, damageIndex)
-
             state.data.zones.placingTrack[cardIndex].underDamage.push(state.data.zones.placingTrack[damageIndex]);
             state.data.zones.placingTrack.splice(damageIndex, 1);
 
@@ -93,6 +96,8 @@ export const submitCards = function submitCards () {
             state.uiData.activePlayer = !state.uiData.activePlayer;
             return;
         }
+        state.uiData.phaseDesc = { text: "", color: "#d06100" };
+        state.uiData.youPassed = false;
         state.data.zones.track.push(state.data.zones.placingTrack[0]);
         state.data.zones.placingTrack.splice(0, 1);
         state.uiData.activePlayer = !state.uiData.activePlayer;

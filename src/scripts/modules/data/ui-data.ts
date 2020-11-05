@@ -6,12 +6,14 @@ export const uiData = {
     numberOfCardsSelectable: 0,
     activePlayer: true,
     phaseDamage: 0,
+    phaseDesc: { text: "", color: "transparent" },
     // 3 player states
     eventsDisabledZones: ["wreckage", "deck", "ship", "armor", "track"],
     faceDownZones: ["deck", "armor"],
     placingCards: true,
     waiting: false,
     oppPassed: false,
+    youPassed: false,
 
     trackResolving: false,
     startingPlayer: true,

@@ -1,4 +1,6 @@
-import { updateState, updateStateSend, updateStateSendPass } from "../../state-management/immer-state"
+import { updateState, updateStateSend, updateStateSendPass, getCurrentState } from "../../state-management/immer-state"
+import { beginResolution } from "../resolution-phase"
+
 
 export const moveCardsZones = function moveCardsZones (fromZone:string, toZone:string, amount:number, fromTop:boolean) {
 
@@ -47,23 +49,32 @@ export const updateOpponentsData = function updateOpponentsData (opponentsData:a
 
 export const pass = function pass (state) {
     if (state.uiData.oppPassed === true) {
-        alert("The round has ended. Resolution phase begins");
-        // updateStateSendPass((state:any)=>{
-        //     state.uiData.resolutionPhase = true;
-        //   });
+        beginResolution(state);
+        updateStateSendPass((state:any)=>{
+            state.uiData.phaseDesc = { text: "Starting resolution phase", color: "#2000a0" };
+            state.uiData.activePlayer = false;
+          });
         return;
     }
 
     updateStateSendPass((state:any)=>{
+        state.uiData.phaseDesc = { text: "You have passed. If your opponent passes the resolution phase will begin.", color: "#d06100" };
+        state.uiData.youPassed = true;
         state.uiData.activePlayer = !state.uiData.activePlayer;
       });
 }
 
 export const opponentPassed = function opponentPassed () {
-    updateState((state:any)=>{
-        state.uiData.oppPassed = true;
-        state.uiData.activePlayer = !state.uiData.activePlayer;
-      });
+    const currentState = getCurrentState();
+    if (currentState.uiData.youPassed === true) {
+        beginResolution(currentState);
+    } else {
+        updateState((state:any)=>{
+            state.uiData.phaseDesc = { text: "Opponent passed. If you pass now the resolution phase will begin.", color: "#d06100" };
+            state.uiData.oppPassed = true;
+            state.uiData.activePlayer = !state.uiData.activePlayer;
+          });
+    }
 }
 
 function moveCards (fromArr:[], toArr:any, amount:number, fromTop:boolean) {

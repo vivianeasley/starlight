@@ -20,6 +20,19 @@ export const updateState = function updateState (updateFucnt:any) {
     return true;
 }
 
+export const updateStatePromise = function updateStatePromise (updateFucnt:any) {
+    return new Promise((resolve, reject) => {
+        try {
+            const nextState = produce(lastState[lastState.length - 1], updateFucnt);
+            renderDOM(nextState);
+            lastState.push(nextState);
+            resolve();
+        } catch (err) {
+            reject(err);
+        }
+    })
+}
+
 export const updateStateSend = function updateState (updateFucnt:any) {
     const nextState = produce(lastState[lastState.length - 1], updateFucnt);
     renderDOM(nextState);

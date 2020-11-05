@@ -4,10 +4,12 @@ import { zoneViewArea } from "./card-area/cards-zone-view"
 import { playerControls } from "./controls/player-controls"
 import { opponentControls } from "./controls/opponent-controls"
 import { matchmakingModal } from "../templates/matchmaking-modal"
+import { phaseDesc } from "../templates/card-area/phase-desc"
 
 export const zoneCardArea = function zoneCardArea (state:any) {
 
     return html`
+        <div>${phaseDesc(state)}</div>
         <div>${zoneTrackArea(state)}</div>
         <div>${zoneViewArea(state)}</div>
         <div>${playerControls(state)}</div>

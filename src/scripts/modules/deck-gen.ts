@@ -64,7 +64,7 @@ function getOneCards () {
             locked: false,
             underDamage: [],
             rules: "Return the previous card on the track to its owner's hand.",
-            functs: ["targetPrevious", "trackToHand"]
+            functs: ["trackToHand"]
         },
         {
             id: "1-3",
@@ -79,7 +79,7 @@ function getOneCards () {
             locked: false,
             underDamage: [],
             rules: "Return the top card of your wreckage pile to your hand.",
-            functs: ["targetTopWreckage", "wreckageToHand"]
+            functs: ["wreckageToHand"]
         },
     ]
 }
@@ -98,7 +98,7 @@ function getTwoCards () {
             locked: false,
             underDamage: [],
             rules: "Send the previous card on the track to its owner's wreckage pile.",
-            functs: ["targetPrevious","trackToWreckage"]
+            functs: ["trackToWreckage"]
         },
         {
             id: "1-4",
@@ -112,7 +112,7 @@ function getTwoCards () {
             locked: false,
             underDamage: [],
             rules: "Deal 2 damage to your opponents ship.",
-            functs: ["amountTwo", "armorToWreckage"]
+            functs: ["amountTwo", "damage"]
         },
         {
             id: "1-4",
@@ -126,7 +126,7 @@ function getTwoCards () {
             locked: false,
             underDamage: [],
             rules: "Put the top card of your deck on top of your armor pile.",
-            functs: ["deckToWreckage"]
+            functs: ["deckToHand"]
         },
     ]
 }

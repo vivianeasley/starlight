@@ -209,7 +209,6 @@ function receiveDataChannel(event) {
 function receiveDataChannelMessage(event:any) {
   const gameData = JSON.parse(event.data);
     if (gameData === "passed") {
-      alert("Opponent passed. If you pass now the round will end.");
       opponentPassed();
       return;
     }
