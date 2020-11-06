@@ -9,7 +9,7 @@ export const generateDeck = function generateDeck (event:any) {
             let card = getTwoCards();
             const random = Math.floor(Math.random() * card.length);
             let fullCard = {...baseCard, ...card[random]};
-            fullCard.owner = state.uiData.userID;
+            fullCard.ownerID= state.uiData.userID;
             state.data.zones.deck.push(fullCard);
             i++;
           }
@@ -19,7 +19,7 @@ export const generateDeck = function generateDeck (event:any) {
             let card = getOneCards();
             const random = Math.floor(Math.random() * card.length);
             let fullCard = {...baseCard, ...card[random]};
-            fullCard.owner = state.uiData.userID;
+            fullCard.ownerID= state.uiData.userID;
             state.data.zones.deck.push(fullCard);
             k++;
         }
@@ -143,6 +143,6 @@ function getGeneralCardData () {
     return {
         locked: false,
         underDamage: [],
-        owner: undefined
+        ownerID: undefined
     }
 }

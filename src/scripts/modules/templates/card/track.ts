@@ -12,23 +12,25 @@ export const trackCard = function trackCard (cardData:any, index:number, state:a
 
     const isFaceDown = faceDownZones.includes(selectedZone);
     const isNotClickable = eventsDisabledZones.includes(selectedZone);
-    const ownedByPlayer = cardData.owner ===  userID;
+    const ownedByPlayer = cardData.ownerID === userID;
+    const isCovered = cardData.underDamage && cardData.underDamage.length > 0;
 
-    return html`
-    <div class="${getCardWrapperClass()}" onclick=${(e:any)=>{placeCard(index, state, selectedZone, e, isNotClickable)}}>
-        ${
-            cardData.underDamage && cardData.underDamage.length > 0 ?
-            html`
-                ${crewCard(cardData, isFaceDown, ownedByPlayer)}
-                <div class="${ownedByPlayer ? "card-image-top-wrapper transparent": "card-image-top-wrapper"}">
-                    <img class="card-image" src="${"./images/cards/"+cardData.underDamage[0].image}" alt="${"Card name "+ cardData.underDamage[0].name}">
-                </div>
-            `:
-            html`${crewCard(cardData, isFaceDown, ownedByPlayer)}`
-        }
-
-    </div>
-    `
+    if (isCovered) {
+        return html`
+        <div class="${getCardWrapperClass()}" onclick=${(e:any)=>{placeCard(index, state, selectedZone, e, isNotClickable)}}>
+            ${crewCard(cardData, isFaceDown, ownedByPlayer)}
+            <div class="${ownedByPlayer ? "card-image-top-wrapper transparent": "card-image-top-wrapper"}">
+                <img class="card-image" src="${"./images/cards/"+cardData.underDamage[0].image}" alt="${"Card name "+ cardData.underDamage[0].name}">
+            </div>
+        </div>
+        `
+    } else {
+        return html`
+        <div class="${getCardWrapperClass()}" onclick=${(e:any)=>{placeCard(index, state, selectedZone, e, isNotClickable)}}>
+            ${crewCard(cardData, isFaceDown, ownedByPlayer)}
+        </div>
+        `
+    }
 
     function getCardWrapperClass () {
         if (selectedZone === "armor") return "card-wrapper-armor";

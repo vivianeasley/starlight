@@ -27,7 +27,7 @@ export const gameSetUp = function gameSetUp () {
         // moveCards(state.data.zones.deck, state.data.zones.wreckage, state.data.zones.ship[0].armor, true);
         for (let index = 0; index < state.data.zones.ship[0].damage; index++) {
             const damageCard = getDamageCardData();
-            damageCard.owner = state.uiData.userID;
+            damageCard.ownerID = state.uiData.userID;
             state.data.zones.damage.push(damageCard);
         }
         state.uiData.gameStarted = true;
@@ -104,7 +104,7 @@ function getDamageCardData () {
         rules: "Deal 1 damage to an opponents ship.",
         functs: ["damage"],
         locked: false,
-        underDamage: false,
-        owner: undefined,
+        underDamage: [],
+        ownerID: undefined,
     }
 }

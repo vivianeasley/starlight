@@ -10,7 +10,6 @@ export const zoneTrackArea =  function zoneTrackArea (state:any) {
     const { activePlayer } = uiData;
     const { zones, opponentZones } = data;
     const { track, placingTrack, wreckage } = zones;
-
     const totalWReckageLength = state.data.zones.wreckage.length + state.data.opponentZones.wreckage.length;
 
     return html`
