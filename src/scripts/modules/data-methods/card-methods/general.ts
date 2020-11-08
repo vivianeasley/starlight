@@ -30,6 +30,7 @@ export const gameSetUp = function gameSetUp () {
             damageCard.ownerID = state.uiData.userID;
             state.data.zones.damage.push(damageCard);
         }
+        state.uiData.requireDataFromOpponent = !state.uiData.activePlayer; // or true depending
         state.uiData.gameStarted = true;
         state.uiData.modals.matchmaking = false;
         state.data.zones.track = state.data.opponentZones.track;
@@ -40,6 +41,7 @@ export const gameSetUp = function gameSetUp () {
 
 export const updateOpponentsData = function updateOpponentsData (opponentsData:any) {
     updateState((state:any)=>{
+        state.uiData.requireDataFromOpponent = false;
         state.uiData.oppPassed = false;
         state.data.opponentZones = opponentsData;
         state.data.zones.track = state.data.opponentZones.track;
@@ -51,6 +53,8 @@ export const pass = function pass (state) {
     if (state.uiData.oppPassed === true) {
         beginResolution(state);
         updateStateSendPass((state:any)=>{
+            state.uiData.phase = 2;
+            state.uiData.requireDataFromOpponent = true;
             state.uiData.phaseDesc = { text: "Starting resolution phase", color: "#2000a0" };
             state.uiData.activePlayer = false;
           });
@@ -58,6 +62,7 @@ export const pass = function pass (state) {
     }
 
     updateStateSendPass((state:any)=>{
+        state.uiData.requireDataFromOpponent = true;
         state.uiData.phaseDesc = { text: "You have passed. If your opponent passes the resolution phase will begin.", color: "#d06100" };
         state.uiData.youPassed = true;
         state.uiData.activePlayer = !state.uiData.activePlayer;
@@ -70,6 +75,7 @@ export const opponentPassed = function opponentPassed () {
         beginResolution(currentState);
     } else {
         updateState((state:any)=>{
+            state.uiData.requireDataFromOpponent = false;
             state.uiData.phaseDesc = { text: "Opponent passed. If you pass now the resolution phase will begin.", color: "#d06100" };
             state.uiData.oppPassed = true;
             state.uiData.activePlayer = !state.uiData.activePlayer;
@@ -107,4 +113,29 @@ function getDamageCardData () {
         underDamage: [],
         ownerID: undefined,
     }
+}
+
+export function countSelected (zoneArr:any) {
+    let count = 0;
+    for (let i = 0; i < zoneArr.length; i++) {
+        if (zoneArr[i].isSelected) {
+            count++;
+        }
+    }
+    return count;
+}
+
+export function getSelectedIndices (zoneArr:any) {
+    let indices = {
+        selected: [],
+        unselected: []
+    };
+    for (let i = 0; i < zoneArr.length; i++) {
+        if (zoneArr[i].isSelected === false) {
+            indices.selected.push(i);
+        } else {
+            indices.unselected.push(i);
+        }
+    }
+    return indices;
 }

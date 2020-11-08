@@ -4,6 +4,7 @@ import { zoneViewArea } from "./card-area/cards-zone-view"
 import { playerControls } from "./controls/player-controls"
 import { opponentControls } from "./controls/opponent-controls"
 import { matchmakingModal } from "../templates/matchmaking-modal"
+import { selectionModal } from "../templates/modals/selection-modal"
 import { phaseDesc } from "../templates/card-area/phase-desc"
 
 export const zoneCardArea = function zoneCardArea (state:any) {
@@ -14,7 +15,8 @@ export const zoneCardArea = function zoneCardArea (state:any) {
         <div>${zoneViewArea(state)}</div>
         <div>${playerControls(state)}</div>
         <div>${opponentControls(state)}</div>
-        <div>${matchmakingModal(state)}</div>
+        ${matchmakingModal(state)}
+        ${selectionModal(state)}
 
     `;
 }

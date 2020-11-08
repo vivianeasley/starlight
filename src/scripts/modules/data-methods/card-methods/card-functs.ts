@@ -1,11 +1,11 @@
 import { updateStatePromise } from "../../state-management/immer-state"
 
-export async function targetThisCard (targetIndices:number[], amount:number[], cardData:any, state:any) {
+export async function targetThisCard (targetIndices:number[], amount:number[], state:any) {
     targetIndices.push(state.data.zones.track.length - 1);
     return "last card on track targeted. ";
 }
 
-export async function trackToHand (targetIndices:number[], amount:number[], cardData:any, state:any) {
+export async function trackToHand (targetIndices:number[], amount:number[], state:any) {
     let text = "";
     // default to previous card on track
     if (targetIndices.length === 0) {
@@ -21,7 +21,7 @@ export async function trackToHand (targetIndices:number[], amount:number[], card
     return text;
 }
 
-export async function wreckageToHand (targetIndices:number[], amount:number[], cardData:any, state:any) {
+export async function wreckageToHand (targetIndices:number[], amount:number[], state:any) {
     if (state.data.zones.wreckage.length === 0) return "No targets in wreckage pile."
 
     let text = "";
@@ -38,7 +38,7 @@ export async function wreckageToHand (targetIndices:number[], amount:number[], c
     return text;
 }
 
-export async function deckToHand (targetIndices:number[], amount:number[], cardData:any, state:any) {
+export async function deckToHand (targetIndices:number[], amount:number[], state:any) {
     if (state.data.zones.deck.length === 0) return "No targets in deck pile." // TODO: initiate game loss
 
     let text = "";
@@ -54,12 +54,12 @@ export async function deckToHand (targetIndices:number[], amount:number[], cardD
     return text;
 }
 
-export async function amountTwo (targetIndices:number[], amount:number[], cardData:any, state:any) {
+export async function amountTwo (targetIndices:number[], amount:number[], state:any) {
     amount.push(2)
     return "Amount set to two.";
 }
 
-export async function damage (targetIndices:number[], amount:number[], cardData:any, state:any) {
+export async function damage (targetIndices:number[], amount:number[], state:any) {
 
     if (amount.length === 0) amount.push(1);
 
@@ -76,7 +76,7 @@ export async function damage (targetIndices:number[], amount:number[], cardData:
 }
 
 
-function moveCardsFunct (fromArrName:string, toArrName:string, indices:number[], prepend:boolean, state:any) {
+export function moveCardsFunct (fromArrName:string, toArrName:string, indices:number[], prepend:boolean, state:any) {
     indices.sort(function(a, b){
         return a - b;
     });
@@ -120,4 +120,17 @@ function moveCardsFunct (fromArrName:string, toArrName:string, indices:number[],
             state.data.zones[fromArrName].splice(indices[i], 1);
         }
     }
+}
+
+export function getDrawTopIndices (drawNum:number, state:any) {
+    const tmpArr =  [];
+    const deck = state.data.zones.deck;
+    const deckLength = deck.length;
+    for (let i = 0; i < drawNum; i++) {
+        if (deck[deckLength - (i + 1)]) {
+            tmpArr.push(deckLength - (i + 1))
+        }
+    }
+
+    return tmpArr;
 }

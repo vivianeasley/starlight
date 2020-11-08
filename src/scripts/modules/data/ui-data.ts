@@ -3,7 +3,6 @@ export const uiData = {
     round: 0,
     playerId: 2,
     selectedZone: "hand",
-    numberOfCardsSelectable: 0,
     activePlayer: true,
     phaseDamage: 0,
     opponentPhaseDamage: 0,
@@ -15,6 +14,12 @@ export const uiData = {
     waiting: false,
     oppPassed: false,
     youPassed: false,
+
+    phase: 1,
+    requireDataFromOpponent: true,
+
+    minCardsSelectable: 4,
+    maxCardsSelectable: 4,
 
     trackResolving: false,
     startingPlayer: true,
@@ -31,6 +36,7 @@ export const uiData = {
 
     // modals
     modals: {
-        matchmaking: true
+        matchmaking: true,
+        selection: false,
     }
 };

@@ -24,6 +24,16 @@ export const generateDeck = function generateDeck (event:any) {
             k++;
         }
 
+        // let l = 0;
+        // while (l < 6) {
+        //     let card = getOneCards();
+        //     const random = Math.floor(Math.random() * card.length);
+        //     let fullCard = {...baseCard, ...card[random]};
+        //     fullCard.ownerID= state.uiData.userID;
+        //     state.data.tmpZone.push(fullCard);
+        //     l++;
+        // }
+
         state.data.zones.deck = shuffle(state.data.zones.deck);
     });
 
@@ -143,6 +153,7 @@ function getGeneralCardData () {
     return {
         locked: false,
         underDamage: [],
-        ownerID: undefined
+        ownerID: undefined,
+        isSelected: false
     }
 }

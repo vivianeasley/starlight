@@ -1,10 +1,17 @@
 import { updateStatePromise, getCurrentState } from "../state-management/immer-state"
 import * as CF from "./card-methods/card-functs"
+import { damageDrawPhase } from "./damage-draw-phase"
 
 export const beginResolution = async function beginResolution (state:any) {
     const trackLength = state.data.zones.track.length;
     const totalTrackLength = state.data.zones.wreckage.length + state.data.opponentZones.wreckage.length + trackLength;
-    if (trackLength === 0) { console.log("Resolution finished"); return;}
+    if (trackLength === 0) {
+        await updateStatePromise((state:any)=>{
+            state.uiData.phase = 3;
+          });
+        damageDrawPhase(state);
+        return;
+    }
     const lastCardObj = state.data.zones.track[trackLength - 1];
 
     let description = "";
@@ -23,7 +30,7 @@ export const beginResolution = async function beginResolution (state:any) {
 
         let index = lastCardObj.underDamage.length - 1;
         for (let k = 0; k < lastCardObj.underDamage[index].functs.length; k++) {
-            description += await CF[lastCardObj.underDamage[index].functs[k]](targetIndices, amount, lastCardObj, state);
+            description += await CF[lastCardObj.underDamage[index].functs[k]](targetIndices, amount, state);
         }
         tmpDamageArr.push(lastCardObj.underDamage[index]);
         await wait(1000);
@@ -45,10 +52,9 @@ export const beginResolution = async function beginResolution (state:any) {
         await wait(1000);
         for (let i = 0; i < lastCardObj.functs.length; i++) {
             // CF is an object with all functions. Access using string name of function
-            description += await CF[lastCardObj.functs[i]](targetIndices, amount, lastCardObj, state);
+            description += await CF[lastCardObj.functs[i]](targetIndices, amount, state);
         }
     } else {
-        console.log("dailed")
         await updateStatePromise((state:any)=>{
             state.uiData.phaseDesc = { text: "Card discarded due to being in invalid position. ", color: "#2000a0" };
         });
@@ -71,7 +77,7 @@ export const beginResolution = async function beginResolution (state:any) {
     beginResolution(currentState)
 }
 
-function wait (time:number) {
+export function wait (time:number) {
     return new Promise((resolve, reject) => {
         try {
             setTimeout(() => {
