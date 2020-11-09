@@ -1,6 +1,6 @@
 export const uiData = {
     gameStarted: false,
-    round: 0,
+    round: 1,
     playerId: 2,
     selectedZone: "hand",
     activePlayer: true,

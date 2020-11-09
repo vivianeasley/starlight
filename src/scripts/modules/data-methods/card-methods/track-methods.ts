@@ -3,15 +3,15 @@ import { countSelected } from "./general"
 
 export const selectTmpZoneCards = function selectTmpZoneCards (index:number, state:any) {
     const { maxCardsSelectable } = state.uiData;
-    const numSelectedCards = countSelected(state.data.tmpZone);
+    const numSelectedCards = countSelected(state.data.zones.tmpZone);
 
-    if (state.data.tmpZone[index].isSelected === false && numSelectedCards === maxCardsSelectable) {
+    if (state.data.zones.tmpZone[index].isSelected === false && numSelectedCards === maxCardsSelectable) {
         console.log("You can't selected anymore cards");
         return;
     }
 
     updateState((state:any)=>{
-        state.data.tmpZone[index].isSelected = !state.data.tmpZone[index].isSelected;
+        state.data.zones.tmpZone[index].isSelected = !state.data.zones.tmpZone[index].isSelected;
     });
 }
 
@@ -71,6 +71,7 @@ export const unplaceCard = function unplaceCard (index:number) {
 }
 
 export const submitCards = function submitCards () {
+    console.log("submitCards requireDataFromOpponent")
     updateStateSend((state:any)=>{
         state.uiData.requireDataFromOpponent = true;
         if (state.data.zones.placingTrack.length > 1) {

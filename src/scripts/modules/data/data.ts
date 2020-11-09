@@ -1,5 +1,4 @@
 export const data = {
-    tmpZone: [],
     opponentVisibleZones: {
         deck: false,
         hand: false,
@@ -16,6 +15,7 @@ export const data = {
         damage: []
     },
     zones: {
+        tmpZone: [],
         placingTrack: [],
         track: [],
         deck: [],

@@ -72,6 +72,9 @@ export const pass = function pass (state) {
 export const opponentPassed = function opponentPassed () {
     const currentState = getCurrentState();
     if (currentState.uiData.youPassed === true) {
+        updateState((state:any)=>{
+            state.uiData.phase = 2;
+          });
         beginResolution(currentState);
     } else {
         updateState((state:any)=>{
@@ -123,19 +126,4 @@ export function countSelected (zoneArr:any) {
         }
     }
     return count;
-}
-
-export function getSelectedIndices (zoneArr:any) {
-    let indices = {
-        selected: [],
-        unselected: []
-    };
-    for (let i = 0; i < zoneArr.length; i++) {
-        if (zoneArr[i].isSelected === false) {
-            indices.selected.push(i);
-        } else {
-            indices.unselected.push(i);
-        }
-    }
-    return indices;
 }

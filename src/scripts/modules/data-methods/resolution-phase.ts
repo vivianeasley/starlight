@@ -6,9 +6,6 @@ export const beginResolution = async function beginResolution (state:any) {
     const trackLength = state.data.zones.track.length;
     const totalTrackLength = state.data.zones.wreckage.length + state.data.opponentZones.wreckage.length + trackLength;
     if (trackLength === 0) {
-        await updateStatePromise((state:any)=>{
-            state.uiData.phase = 3;
-          });
         damageDrawPhase(state);
         return;
     }

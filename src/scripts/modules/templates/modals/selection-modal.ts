@@ -7,8 +7,8 @@ import { manageSelectedCards } from "../../data-methods/damage-draw-phase"
 export const selectionModal =  function selectionModal (state:any) {
     const { uiData, data } = state;
     const { modals, maxCardsSelectable, minCardsSelectable } = uiData;
-    const { tmpZone } = data;
-    const numSelected = countSelected(state.data.tmpZone);
+    const { tmpZone } = data.zones;
+    const numSelected = countSelected(state.data.zones.tmpZone);
 
     function amountCardsSelectString () {
         if (maxCardsSelectable === minCardsSelectable) {
@@ -41,7 +41,7 @@ export const selectionModal =  function selectionModal (state:any) {
             </div>
             <div class="modal-footer">
                 <div>
-                    <button disabled=${ (numSelected < minCardsSelectable) } onclick=${()=>{manageSelectedCards(state)}}>Submit</button>
+                    <button disabled=${ (numSelected < minCardsSelectable) } onclick=${()=>{manageSelectedCards()}}>Submit</button>
                 </div>
             </div>
         </div>

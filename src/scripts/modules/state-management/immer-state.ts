@@ -14,6 +14,7 @@ export function initState (data:any) {
 }
 
 export const updateState = function updateState (updateFucnt:any) {
+    lastState[lastState.length - 1]
     const nextState = produce(lastState[lastState.length - 1], updateFucnt);
     renderDOM(nextState);
     lastState.push(nextState);
@@ -37,6 +38,7 @@ export const updateStateSend = function updateState (updateFucnt:any) {
     const nextState = produce(lastState[lastState.length - 1], updateFucnt);
     renderDOM(nextState);
     lastState.push(nextState);
+    console.log(nextState)
     if (lastState[lastState.length - 1].data) {
         console.log("data sent!");
         sendStateData(lastState[lastState.length - 1].data.zones)

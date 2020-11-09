@@ -85,6 +85,7 @@ export const joinGame = function joinGame (gameID:string) {
   updateState((state:any)=>{
     state.uiData.gameID = gameID;
     state.uiData.activePlayer = false;
+    state.uiData.startingPlayer = false;
   });
 }
 
