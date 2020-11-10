@@ -1,4 +1,5 @@
 import { html } from 'lighterhtml';
+import { beginResolution } from "../../data-methods/resolution-phase"
 
 export const phaseDesc =  function phaseDesc (state:any) {
     const { uiData } = state;
@@ -22,4 +23,9 @@ export const phaseDesc =  function phaseDesc (state:any) {
             ${phaseDesc.text}
         </div>
     `;
+
+    // function proceedButton () {
+    //     if (phase !== 2) return ``;
+    //     return html`<button class="" onclick=${()=>{beginResolution(state)}}>Proceed</button>`
+    // }
 }

@@ -1,11 +1,11 @@
 import { updateStatePromise } from "../../state-management/immer-state"
 
-export async function targetThisCard (targetIndices:number[], amount:number[], state:any) {
+export async function targetThisCard (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
     targetIndices.push(state.data.zones.track.length - 1);
     return "last card on track targeted. ";
 }
 
-export async function trackToHand (targetIndices:number[], amount:number[], state:any) {
+export async function trackToHand (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
     let text = "";
     // default to previous card on track
     if (targetIndices.length === 0) {
@@ -21,7 +21,7 @@ export async function trackToHand (targetIndices:number[], amount:number[], stat
     return text;
 }
 
-export async function wreckageToHand (targetIndices:number[], amount:number[], state:any) {
+export async function wreckageToHand (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
     if (state.data.zones.wreckage.length === 0) return "No targets in wreckage pile."
 
     let text = "";
@@ -38,7 +38,7 @@ export async function wreckageToHand (targetIndices:number[], amount:number[], s
     return text;
 }
 
-export async function deckToHand (targetIndices:number[], amount:number[], state:any) {
+export async function deckToHand (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
     if (state.data.zones.deck.length === 0) return "No targets in deck pile." // TODO: initiate game loss
 
     let text = "";
@@ -54,17 +54,23 @@ export async function deckToHand (targetIndices:number[], amount:number[], state
     return text;
 }
 
-export async function amountTwo (targetIndices:number[], amount:number[], state:any) {
+export async function amountTwo (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
     amount.push(2)
     return "Amount set to two.";
 }
 
-export async function damage (targetIndices:number[], amount:number[], state:any) {
-
-    if (amount.length === 0) amount.push(1);
-
+export async function removeSelf (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
     await updateStatePromise((state:any)=>{
-        if (state.data.zones.track[state.data.zones.track.length - 1].ownerID === state.uiData.userID) {
+        moveCardsFunct("track", "deck", [state.data.zones.track.length - 1], true, state);
+    });
+    return "";
+}
+
+export async function damage (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
+    if (amount.length === 0) amount.push(1);
+    console.log(isOwner)
+    await updateStatePromise((state:any)=>{
+        if (isOwner) {
             state.uiData.opponentPhaseDamage += amount[0];
         } else {
             state.uiData.phaseDamage += amount[0];
@@ -75,6 +81,45 @@ export async function damage (targetIndices:number[], amount:number[], state:any
     return "Damage added!";
 }
 
+export async function doubleOpponentDamage (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
+    let target;
+    if (isOwner) {
+        target = "opponentPhaseDamage";
+    } else {
+        target = "phaseDamage";
+    }
+
+    if (state.uiData[target] === 0) return;
+
+    await updateStatePromise((state:any)=>{
+        state.uiData[target] = state.uiData[target] * 2;
+    });
+
+    return "Current ship damage doubled!";
+}
+
+export async function dealAllTrackDamage (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
+
+    for (let i = 0; i < state.data.zones.track.length; i++) {
+        if (state.data.zones.track[i].underDamage.length > 0) {
+            if (state.data.zones.track[i].underDamage[0].ownerID === state.uiData.userID) {
+                // call damage funct pass isOwner
+
+            } else {
+                // call damage funct pass isOwner
+            }
+        }
+    }
+
+
+    return "Track damage dealt to ships.";
+}
+
+export async function removeAllTrackDamage (targetIndices:number[], amount:number[], isOwner:boolean, state:any) {
+
+
+    return "Track damage removed!";
+}
 
 export function moveCardsFunct (fromArrName:string, toArrName:string, indices:number[], prepend:boolean, state:any) {
     indices.sort(function(a, b){
@@ -95,6 +140,7 @@ export function moveCardsFunct (fromArrName:string, toArrName:string, indices:nu
                 indexSkipArr.push(indices[i]);
                 state.data[playerZone].damage.push(damageCard)
                 cardArrInFromArr.underDamage = [];
+                return;
             } else {
                 // TODO: manage push to bottom
                 playerZone = (state.uiData.userID === cardArrInFromArr.ownerID) ? "zones" : "opponentZones";

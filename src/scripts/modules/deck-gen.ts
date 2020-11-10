@@ -67,14 +67,14 @@ function getOneCards () {
             image: "card-2.jpg",
             type: "crew",
             typeAlign: "fed",
-            typeJob: "medical",
+            typeJob: "engineer",
             place: 2,
             rank: 4,
             wrecked: false,
             locked: false,
             underDamage: [],
             rules: "Return the previous card on the track to its owner's hand.",
-            functs: ["trackToHand"]
+            functs: ["trackToHand", "removeSelf"]
         },
         {
             id: "1-3",
@@ -90,6 +90,21 @@ function getOneCards () {
             underDamage: [],
             rules: "Return the top card of your wreckage pile to your hand.",
             functs: ["wreckageToHand"]
+        },
+        {
+            id: "1-3",
+            name: "C. H. Jovanovic",
+            image: "card-7.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "tactical",
+            place: 1,
+            rank: 4,
+            wrecked: false,
+            locked: false,
+            underDamage: [],
+            rules: "Deal 1 damage to your opponents ship.",
+            functs: ["damage"]
         },
     ]
 }
@@ -108,12 +123,12 @@ function getTwoCards () {
             locked: false,
             underDamage: [],
             rules: "Send the previous card on the track to its owner's wreckage pile.",
-            functs: ["trackToWreckage"]
+            functs: ["trackToWreckage", "removeSelf"]
         },
         {
             id: "1-4",
             name: "V. A. Ilic",
-            image: "card-4.jpg",
+            image: "card-5.jpg",
             type: "crew",
             typeAlign: "fed",
             typeJob: "tactical",
@@ -127,26 +142,54 @@ function getTwoCards () {
         {
             id: "1-4",
             name: "M. E. Kuqi",
-            image: "card-5.jpg",
+            image: "card-6.jpg",
             type: "crew",
             typeAlign: "fed",
-            typeJob: "engineer",
+            typeJob: "science",
             place: 9,
             rank: 3,
             locked: false,
             underDamage: [],
-            rules: "Put the top card of your deck on top of your armor pile.",
+            rules: "Draw a card.",
             functs: ["deckToHand"]
         },
+        {
+            id: "1-4",
+            name: "N. S. Lukic",
+            image: "card-8.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "engineer",
+            place: 12,
+            rank: 3,
+            locked: false,
+            underDamage: [],
+            rules: "Double the amount of damage on your opponents ship.",
+            functs: ["doubleOpponentDamage"]
+        },
+        // {
+        //     id: "1-4",
+        //     name: "N. S. Lukic",
+        //     image: "card-9.jpg",
+        //     type: "crew",
+        //     typeAlign: "fed",
+        //     typeJob: "science",
+        //     place: 14,
+        //     rank: 3,
+        //     locked: false,
+        //     underDamage: [],
+        //     rules: "Resolve all remaing track damage then remove all track damage.",
+        //     functs: ["dealAllTrackDamage", "removeAllTrackDamage"]
+        // },
     ]
 }
 
 function getThreeCards () {
-    return []
+    return [];
 }
 
 function getFourCards () {
-    return []
+    return [];
 }
 
 function getGeneralCardData () {

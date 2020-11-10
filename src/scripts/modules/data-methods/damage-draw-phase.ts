@@ -10,7 +10,7 @@ export async function damageDrawPhase (state:any) {
     const totalDraw = state.data.zones.ship[0].draw + state.uiData.phaseDamage;
     const drawIndices = getDrawTopIndices(totalDraw, state);
     if (state.uiData.phaseDamage === 0) {
-        await deckToHand(drawIndices, [], state);
+        await deckToHand(drawIndices, [], true, state);
         await wait(1000);
         manageSelectedCards();
     } else {

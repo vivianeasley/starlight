@@ -18,16 +18,18 @@ export const beginResolution = async function beginResolution (state:any) {
     // Manage damage cards that are covering cards on the track.
     let tmpDamageArr = [];
     let playerZone;
+    let isOwner = false;
 
     if (lastCardObj.underDamage.length > 0) {
         const underDamageLength = lastCardObj.underDamage.length;
         const damageCard = lastCardObj.underDamage[underDamageLength - 1];
         playerZone = (state.uiData.userID === damageCard.ownerID) ? "zones" : "opponentZones";
+        if (playerZone === "zones") isOwner = true;
         // loop through resolving damage and sending damage card back to damage zone
 
         let index = lastCardObj.underDamage.length - 1;
         for (let k = 0; k < lastCardObj.underDamage[index].functs.length; k++) {
-            description += await CF[lastCardObj.underDamage[index].functs[k]](targetIndices, amount, state);
+            description += await CF[lastCardObj.underDamage[index].functs[k]](targetIndices, amount, isOwner, state);
         }
         tmpDamageArr.push(lastCardObj.underDamage[index]);
         await wait(1000);
@@ -37,6 +39,8 @@ export const beginResolution = async function beginResolution (state:any) {
             state.data.zones.track[trackLength - 1].underDamage = [];
         });
     }
+
+    if (state.data.zones.track[state.data.zones.track.length - 1].ownerID === state.uiData.userID) isOwner = true;
 
     targetIndices = [];
     amount = [1];
@@ -49,13 +53,12 @@ export const beginResolution = async function beginResolution (state:any) {
         await wait(1000);
         for (let i = 0; i < lastCardObj.functs.length; i++) {
             // CF is an object with all functions. Access using string name of function
-            description += await CF[lastCardObj.functs[i]](targetIndices, amount, state);
+            description += await CF[lastCardObj.functs[i]](targetIndices, amount, isOwner, state);
         }
     } else {
         await updateStatePromise((state:any)=>{
             state.uiData.phaseDesc = { text: "Card discarded due to being in invalid position. ", color: "#2000a0" };
         });
-        await wait(2000);
     }
 
 
