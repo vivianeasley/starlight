@@ -24,24 +24,30 @@ export const placeCard = function placeCard (index:number, state:any, cardInZone
     const { zones } = state.data;
     const { placingTrack } = zones;
 
+    if (placingTrack.length === 0 && state.data.zones[cardInZone][index].type === "damage") {
+        updateState((state:any)=>{
+            state.uiData.phaseDesc = { text: "You must place a crew card before placing a damage card. ", color: "#d06100" };
+        });
+        return;
+    }
 
     if (placingTrack.length > 1) {
         updateState((state:any)=>{
-            state.uiData.phaseDesc = { text: "You may only place 1 card from your hand and 1 damage card on top of it", color: "#d06100" };
+            state.uiData.phaseDesc = { text: "You may only place 1 card from your hand and 1 damage card on top of it. ", color: "#d06100" };
         });
         return;
     }
 
     if (placingTrack.length === 1 && state.data.zones.placingTrack[0].type !== "damage" && state.data.zones[cardInZone][index].type !== "damage") {
         updateState((state:any)=>{
-            state.uiData.phaseDesc = { text: "Only 1 damage card and one card from your hand allowed.", color: "#d06100" };
+            state.uiData.phaseDesc = { text: "Only 1 damage card and one card from your hand allowed. ", color: "#d06100" };
         });
         return;
     }
 
     if (placingTrack.length === 1 && state.data.zones.placingTrack[0].type  === "damage" && state.data.zones[cardInZone][index].type === "damage") {
         updateState((state:any)=>{
-            state.uiData.phaseDesc = { text: "Only 1 damage card and one card from your hand allowed.", color: "#d06100" };
+            state.uiData.phaseDesc = { text: "Only 1 damage card and one card from your hand allowed. ", color: "#d06100" };
         });
         return;
     }
@@ -56,6 +62,13 @@ export const placeCard = function placeCard (index:number, state:any, cardInZone
 export const unplaceCard = function unplaceCard (index:number) {
 
     updateState((state:any)=>{
+        if (state.data.zones.placingTrack.length === 2 && state.data.zones.placingTrack[index].type !== "damage") {
+            const damageIndex = index === 0 ? 1 : 0;
+
+            state.data.zones.damage.push(state.data.zones.placingTrack[damageIndex]);
+            state.data.zones.placingTrack.splice(damageIndex, 1);
+        }
+
         if (state.data.zones.placingTrack[index].type === "damage") {
             state.data.zones.damage.push(state.data.zones.placingTrack[index]);
             state.data.zones.placingTrack.splice(index, 1);
@@ -71,7 +84,6 @@ export const unplaceCard = function unplaceCard (index:number) {
 }
 
 export const submitCards = function submitCards () {
-    console.log("submitCards requireDataFromOpponent")
     updateStateSend((state:any)=>{
         state.uiData.requireDataFromOpponent = true;
         if (state.data.zones.placingTrack.length > 1) {

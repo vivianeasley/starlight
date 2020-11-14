@@ -49,7 +49,7 @@ ws.onmessage = (msg) => {
 
 }
 
-///////// END MATCH MAKING METHODS //////////
+///////// START MATCH MAKING METHODS //////////
 
 export const setName = function setName (event:any, state:any) {
   SIGNAL_ID = state.uiData.gameID;

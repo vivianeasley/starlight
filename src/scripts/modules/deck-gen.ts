@@ -52,12 +52,10 @@ function getOneCards () {
             image: "card-1.jpg",
             type: "crew",
             typeAlign: "fed",
-            typeJob: "science",
+            typeJob: "operations",
             place: 1,
             rank: 4,
             wrecked: false,
-            locked: false,
-            underDamage: [],
             rules: "Return this card to it's owner's hand.",
             functs: ["targetThisCard", "trackToHand"]
         },
@@ -71,8 +69,6 @@ function getOneCards () {
             place: 2,
             rank: 4,
             wrecked: false,
-            locked: false,
-            underDamage: [],
             rules: "Return the previous card on the track to its owner's hand.",
             functs: ["trackToHand", "removeSelf"]
         },
@@ -83,13 +79,11 @@ function getOneCards () {
             type: "crew",
             typeAlign: "fed",
             typeJob: "medical",
-            place: 3,
+            place: 5,
             rank: 4,
             wrecked: false,
-            locked: false,
-            underDamage: [],
-            rules: "Return the top card of your wreckage pile to your hand.",
-            functs: ["wreckageToHand"]
+            rules: "Return the top card of your wreckage pile to the bottom of your deck.",
+            functs: ["wreckageToBottomDeck"]
         },
         {
             id: "1-3",
@@ -101,8 +95,6 @@ function getOneCards () {
             place: 1,
             rank: 4,
             wrecked: false,
-            locked: false,
-            underDamage: [],
             rules: "Deal 1 damage to your opponents ship.",
             functs: ["damage"]
         },
@@ -118,10 +110,8 @@ function getTwoCards () {
             type: "crew",
             typeAlign: "fed",
             typeJob: "tactical",
-            place: 5,
+            place: 11,
             rank: 3,
-            locked: false,
-            underDamage: [],
             rules: "Send the previous card on the track to its owner's wreckage pile.",
             functs: ["trackToWreckage", "removeSelf"]
         },
@@ -134,10 +124,21 @@ function getTwoCards () {
             typeJob: "tactical",
             place: 8,
             rank: 3,
-            locked: false,
-            underDamage: [],
             rules: "Deal 2 damage to your opponents ship.",
             functs: ["amountTwo", "damage"]
+        },
+        {
+            id: "1-3",
+            name: "M. M. Huber",
+            image: "card-10.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "medical",
+            place: 10,
+            rank: 3,
+            wrecked: false,
+            rules: "Return the top card of your wreckage pile to your hand.",
+            functs: ["wreckageToHand"]
         },
         {
             id: "1-4",
@@ -145,11 +146,9 @@ function getTwoCards () {
             image: "card-6.jpg",
             type: "crew",
             typeAlign: "fed",
-            typeJob: "science",
+            typeJob: "operations",
             place: 9,
             rank: 3,
-            locked: false,
-            underDamage: [],
             rules: "Draw a card.",
             functs: ["deckToHand"]
         },
@@ -162,25 +161,21 @@ function getTwoCards () {
             typeJob: "engineer",
             place: 12,
             rank: 3,
-            locked: false,
-            underDamage: [],
             rules: "Double the amount of damage on your opponents ship.",
             functs: ["doubleOpponentDamage"]
         },
-        // {
-        //     id: "1-4",
-        //     name: "N. S. Lukic",
-        //     image: "card-9.jpg",
-        //     type: "crew",
-        //     typeAlign: "fed",
-        //     typeJob: "science",
-        //     place: 14,
-        //     rank: 3,
-        //     locked: false,
-        //     underDamage: [],
-        //     rules: "Resolve all remaing track damage then remove all track damage.",
-        //     functs: ["dealAllTrackDamage", "removeAllTrackDamage"]
-        // },
+        {
+            id: "1-4",
+            name: "B. I. Kayser",
+            image: "card-9.jpg",
+            type: "crew",
+            typeAlign: "fed",
+            typeJob: "science",
+            place: 14,
+            rank: 3,
+            rules: "Resolve all remaing track damage then remove all track damage.",
+            functs: ["dealAllTrackDamageAsOne", "removeAllTrackDamage"]
+        },
     ]
 }
 
