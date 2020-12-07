@@ -1,4 +1,4 @@
-# Static Site Base
+# Starlight CCG
 
 A space-themed online or print-to-play CCG. Uses webRTC data channel and a signaling server to allow 1v1 gameplay. In early development.
 
